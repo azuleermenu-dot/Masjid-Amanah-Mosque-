@@ -398,3 +398,22 @@ button { font: inherit; }
 @media(max-width:700px) { .facility-section ul { grid-template-columns:1fr; } .profile-section { grid-template-columns:40px 1fr; gap:13px; } }
 
 .prayer-empty { margin:0; padding:22px 10px; color:var(--muted); font-size:11px; }
+
+
+/* Announcement reading experience */
+.announcement-card h2 a { color:inherit; transition:color .2s ease; }
+.announcement-card h2 a:hover { color:var(--gold); }
+.announcement-card-footer { display:flex; align-items:center; justify-content:space-between; gap:18px; padding-top:14px; border-top:1px solid var(--line); }
+.announcement-card-footer time,.announcement-date-pending { color:var(--muted); font-size:10px; }
+.announcement-read-link { display:inline-flex; align-items:center; gap:7px; color:var(--green); font-size:11px; font-weight:700; }
+.announcement-detail { max-width:850px; margin:0 auto; padding:28px; border:1px solid var(--line); background:var(--paper); }
+.announcement-detail-meta { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding-bottom:20px; border-bottom:1px solid var(--line); }
+.announcement-detail-meta>span,.announcement-back-link { display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-size:11px; }
+.announcement-detail-body { padding:30px 0 42px; color:var(--ink); font-size:14px; line-height:2; white-space:pre-wrap; overflow-wrap:anywhere; }
+.announcement-detail-bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:20px; border-top:1px solid var(--line); }
+.announcement-detail-bottom .text-link { margin:0; }
+@media(max-width:520px) {
+  .announcement-card-footer,.announcement-detail-bottom { align-items:flex-start; flex-direction:column; }
+  .announcement-detail { padding:19px; }
+  .announcement-detail-body { padding:22px 0 30px; font-size:13px; }
+}
