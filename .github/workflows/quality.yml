@@ -33,7 +33,14 @@ jobs:
           console.log("Dependency audit totals:", audit.metadata?.vulnerabilities ?? {});
           for (const [name, item] of Object.entries(audit.vulnerabilities ?? {})) {
             console.log(
-              `${item.severity.toUpperCase()}: ${name}; direct=${item.isDirect}; fix=${JSON.stringify(item.fixAvailable)}`
+              `${item.severity.toUpperCase()}: ${name}; direct=${item.isDirect}; range=${item.range}; fix=${JSON.stringify(item.fixAvailable)}`
+            );
+            if (Array.isArray(item.via)) {
+              for (const advisory of item.via) {
+                if (typeof advisory === "object") {
+                  console.log("  Advisory:", JSON.stringify({ title: advisory.title, url: advisory.url, range: advisory.range, cwe: advisory.cwe, cvss: advisory.cvss }));
+                }
+              }
             );
           }
           NODE

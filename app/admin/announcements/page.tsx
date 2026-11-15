@@ -68,6 +68,9 @@ export default async function ManageAnnouncementsPage({ searchParams }: Props) {
             {announcements.map((item) => <article className="admin-list-row" key={item.id}>
               <div><strong>{item.title}</strong><span>/{item.slug}</span></div>
               <div className="admin-row-actions">
+                <Link href={`/admin/announcements/${item.id}`} className="small-admin-link" aria-label={`Edit ${item.title}`}>
+                  <Pencil size={12} /> Edit
+                </Link>
                 <form action={updateAnnouncementStatus} className="inline-status-form">
                   <input type="hidden" name="id" value={item.id} />
                   <label className="inline-checkbox"><input type="checkbox" name="is_published" defaultChecked={item.is_published} /> Publish</label>

@@ -1,3 +1,6 @@
+/* The global Google Fonts stylesheet is intentionally loaded in the root layout.
+   Using next/font/google made CI builds depend on external font downloads. */
+/* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
