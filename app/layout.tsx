@@ -4,7 +4,19 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+function getPublicSiteUrl() {
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!configuredUrl) return undefined;
+
+  try {
+    const url = new URL(configuredUrl);
+    return url.protocol === "https:" ? url : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const publicSiteUrl = getPublicSiteUrl();
 const approvedForIndexing = process.env.PUBLIC_CONTENT_APPROVED === "true" && Boolean(publicSiteUrl);
 
 export const metadata: Metadata = {
@@ -15,12 +27,13 @@ export const metadata: Metadata = {
   description:
     "The official digital home of Masjid Amanah. Find mosque updates, prayer information, community programs, and ways to get in touch.",
   applicationName: "Masjid Amanah",
-  metadataBase: publicSiteUrl ? new URL(publicSiteUrl) : undefined,
+  metadataBase: publicSiteUrl,
   openGraph: {
     title: "Masjid Amanah | مسجد الأمانة",
     description: "A place of worship, knowledge, unity, and community.",
     type: "website",
     siteName: "Masjid Amanah",
+    url: publicSiteUrl?.origin,
   },
   robots: { index: approvedForIndexing, follow: approvedForIndexing },
 };
