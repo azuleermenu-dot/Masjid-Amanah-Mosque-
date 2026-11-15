@@ -55,6 +55,7 @@ This project deliberately does not invent the mosque's history, leaders, address
 
 ## Current implementation
 - Responsive homepage and shared navigation/footer.
+- Prayer countdown checks both today and tomorrow when verified entries are available, without generating missing prayer times.
 - Authorized mosque-profile editor for approved history, mission, vision, facilities, address, contact, and social links.
 - Dedicated pages for About, Prayer Times, Programs, Learning, News, Gallery, Donations, and Contact.
 - Restricted admin sign-in and server-verified administrator dashboard.
