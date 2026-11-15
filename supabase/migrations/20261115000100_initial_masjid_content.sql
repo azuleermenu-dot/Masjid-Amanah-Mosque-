@@ -212,16 +212,31 @@ create policy "Admins can review contact inquiries"
 -- Gallery files are publicly readable only because each public gallery item uses
 -- approved imagery. Uploads and mutations remain restricted to mosque admins.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('mosque-gallery', 'mosque-gallery', true, 5242880, array['image/jpeg', 'image/png', 'image/webp'])
+values ('mosque-gallery', 'mosque-gallery', false, 5242880, array['image/jpeg', 'image/png', 'image/webp'])
 on conflict (id) do update
 set public = excluded.public,
     file_size_limit = excluded.file_size_limit,
     allowed_mime_types = excluded.allowed_mime_types;
 
 drop policy if exists "Public can view approved mosque gallery files" on storage.objects;
-create policy "Public can view approved mosque gallery files"
+drop policy if exists "Public can view published mosque gallery files" on storage.objects;
+create policy "Public can view published mosque gallery files"
   on storage.objects for select to anon, authenticated
-  using (bucket_id = 'mosque-gallery');
+  using (
+    bucket_id = 'mosque-gallery'
+    and exists (
+      select 1 from public.gallery_items gi
+      where gi.image_path = name and gi.is_published
+    )
+  );
+
+drop policy if exists "Mosque admins can view all gallery files" on storage.objects;
+create policy "Mosque admins can view all gallery files"
+  on storage.objects for select to authenticated
+  using (
+    bucket_id = 'mosque-gallery'
+    and exists (select 1 from public.admin_users a where a.user_id = (select auth.uid()))
+  );
 
 drop policy if exists "Mosque admins upload gallery files" on storage.objects;
 create policy "Mosque admins upload gallery files"
