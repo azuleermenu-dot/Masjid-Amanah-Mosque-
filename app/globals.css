@@ -381,3 +381,18 @@ button { font: inherit; }
 .contact-success h3 { margin:15px 0 6px; font:500 28px var(--font-display),Georgia,serif; }
 .contact-success p { margin:0; color:var(--muted); font-size:12px; line-height:1.8; }
 @media(max-width:520px) { .contact-form-card { padding:21px; } .contact-submit { width:100%; } }
+
+
+/* Mosque profile pages */
+.profile-sections { display:grid; gap:0; border-top:1px solid var(--line); }
+.profile-section { display:grid; grid-template-columns:46px 1fr; gap:17px; padding:25px 0; border-bottom:1px solid var(--line); }
+.profile-section-icon { display:grid; place-items:center; width:44px; height:44px; background:var(--green-soft); color:var(--green); }
+.profile-section p { margin:9px 0 0; color:var(--muted); font-size:13px; line-height:1.9; white-space:pre-wrap; }
+.facility-section { margin-top:48px; padding:28px; background:#eef1e9; }
+.facility-section h2 { margin:12px 0; color:var(--green); font-size:clamp(32px,4vw,44px); }
+.facility-section ul { display:grid; grid-template-columns:repeat(2,1fr); gap:10px 30px; padding-left:20px; color:var(--muted); font-size:12px; line-height:1.8; }
+.contact-card a { display:inline-flex; align-items:center; gap:6px; margin-top:8px; color:var(--green); font-size:11px; font-weight:700; overflow-wrap:anywhere; }
+.social-contact-links { display:grid; justify-items:start; gap:4px; }
+.profile-save-note { margin:18px 0 0; padding:13px 15px; background:#eef1e9; color:var(--green); font-size:10px; line-height:1.7; }
+.profile-admin-form .admin-editor { margin-top:24px; }
+@media(max-width:700px) { .facility-section ul { grid-template-columns:1fr; } .profile-section { grid-template-columns:40px 1fr; gap:13px; } }
