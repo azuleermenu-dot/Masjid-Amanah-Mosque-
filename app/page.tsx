@@ -40,18 +40,19 @@ export default function Home() {
   useEffect(() => {
     const supabase = createSupabaseBrowserClient();
     if (!supabase) return;
+    const client = supabase;
 
     let isMounted = true;
 
     async function loadHomepageContent() {
       try {
         const [profileResult, announcementResult] = await Promise.all([
-          supabase
+          client
             .from("mosque_profile")
             .select("introduction,address,map_url")
             .eq("id", true)
             .maybeSingle(),
-          supabase
+          client
             .from("announcements")
             .select("title,slug,excerpt,body,published_at")
             .eq("is_published", true)
