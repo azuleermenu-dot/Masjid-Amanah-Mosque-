@@ -22,7 +22,7 @@ The public website runs without Supabase credentials and displays clearly marked
 ## Supabase setup
 1. Create a separate Supabase project specifically for Masjid Amanah. Do not reuse a different organization's project.
 2. Copy the project URL and publishable key into `.env.local` and the Vercel environment settings. Add the secret key only as a server-side secret named `SUPABASE_SECRET_KEY`; never expose it in client code or a `NEXT_PUBLIC_*` variable.
-3. Apply `supabase/migrations/20261115000100_initial_masjid_content.sql` in the dedicated project's SQL editor.
+3. Apply every SQL migration in `supabase/migrations/` in filename order. This includes the initial content schema, the secure contact-submission permission change, and the forward-only leadership profile field migration.
 4. Invite/create the mosque-approved administrator through Supabase Auth.
 5. Update and run `supabase/authorize-first-admin.sql` with that administrator's exact verified email.
 6. Keep public sign-up disabled. Never expose the secret key in browser code or a `NEXT_PUBLIC_*` variable.
@@ -58,9 +58,17 @@ This project deliberately does not invent the mosque's history, leaders, address
 - Responsive homepage and shared navigation/footer, including live approved mosque introduction, location, and latest announcement when the public database is configured.
 - Prayer countdown checks both today and tomorrow when verified entries are available, without generating missing prayer times.
 - Authorized mosque-profile editor for approved history, mission, vision, facilities, address, contact, and social links.
-- Dedicated pages for About, Prayer Times, Programs, Learning, News (including individual announcement pages), Gallery, Donations, and Contact.
+- Dedicated pages for About, Prayer Times, Programs, Learning (including full resource reading pages), News (including individual announcement pages), Gallery, Donations, and Contact.
 - Restricted admin sign-in and server-verified administrator dashboard.
-- Announcement creation and publishing UI.
+- Full announcement create, edit, publish/unpublish, and delete workflow.
+- Event create, edit, publish/unpublish, and delete workflow, with an iCalendar download for upcoming public events.
+- Prayer schedule single-entry and full-day bulk editors, publication controls, and deletion.
+- Learning resource create, edit, review, publish/unpublish, delete, and public detail pages.
+- Donation method create, edit, verify, publish/unpublish, and delete workflow; edited payment details require fresh confirmation.
+- Mosque gallery uploads and deletion with private storage and short-lived signed public image URLs.
+- Private contact inquiry inbox with status management and a Turnstile-protected submission form.
+- Branded loading, error, and not-found states; installable web app manifest and icon.
 - Initial Supabase schema with RLS policies, gallery storage policies, and verified-donation publication safeguards.
 - Public information remains marked as pending until confirmed.
+- GitHub Actions checks TypeScript, the production build, and dependency audit reporting on repository changes.
 - Approval-gated sitemap includes published announcement detail pages when the production domain and content approval switch are configured.
