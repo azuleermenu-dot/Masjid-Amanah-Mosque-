@@ -72,3 +72,50 @@ export async function deleteAnnouncement(formData: FormData) {
   revalidatePath("/admin/announcements");
   redirect("/admin/announcements?deleted=1");
 }
+
+
+export async function updateAnnouncement(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const excerpt = String(formData.get("excerpt") ?? "").trim();
+  const body = String(formData.get("body") ?? "").trim();
+  const isPublished = formData.get("is_published") === "on";
+
+  if (!/^[0-9a-f-]{36}$/i.test(id) || title.length < 3 || title.length > 160 ||
+      excerpt.length > 400 || body.length < 1 || body.length > 12000) {
+    redirect(`/admin/announcements/${id}?error=validation`);
+  }
+
+  const slug = slugify(title);
+  if (slug.length < 3) redirect(`/admin/announcements/${id}?error=slug`);
+
+  const { data: current, error: currentError } = await supabase
+    .from("announcements")
+    .select("slug,published_at")
+    .eq("id", id)
+    .maybeSingle();
+  if (currentError || !current) redirect("/admin/announcements?error=save");
+
+  const publishedAt = isPublished ? current.published_at ?? new Date().toISOString() : null;
+  const { error } = await supabase.from("announcements").update({
+    title,
+    slug,
+    excerpt,
+    body,
+    is_published: isPublished,
+    published_at: publishedAt,
+    updated_at: new Date().toISOString(),
+  }).eq("id", id);
+
+  if (error) {
+    const reason = error.code === "23505" ? "duplicate" : "save";
+    redirect(`/admin/announcements/${id}?error=${reason}`);
+  }
+
+  revalidatePath("/news");
+  revalidatePath(`/news/${current.slug}`);
+  revalidatePath(`/news/${slug}`);
+  revalidatePath("/admin/announcements");
+  redirect("/admin/announcements?saved=1");
+}

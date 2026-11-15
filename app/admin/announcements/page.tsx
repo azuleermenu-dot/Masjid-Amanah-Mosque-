@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAdmin } from "@/app/admin/actions";
 import { createAnnouncement, deleteAnnouncement, updateAnnouncementStatus } from "./actions";
-import { ArrowLeft, Megaphone, Plus, ShieldCheck, Trash2 } from "lucide-react";
+import { ArrowLeft, Megaphone, Plus, ShieldCheck, Trash2, Pencil } from "lucide-react";
 
 export const metadata: Metadata = { title: "Manage Announcements", robots: { index: false, follow: false } };
 
