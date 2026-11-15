@@ -41,7 +41,7 @@ jobs:
                   console.log("  Advisory:", JSON.stringify({ title: advisory.title, url: advisory.url, range: advisory.range, cwe: advisory.cwe, cvss: advisory.cvss }));
                 }
               }
-            );
+            }
           }
           NODE
       - name: Type check
