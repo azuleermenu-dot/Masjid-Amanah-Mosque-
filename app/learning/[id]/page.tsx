@@ -43,12 +43,13 @@ export default async function LearningResourceDetailPage({ params }: Props) {
   const resource = await getPublishedResource(id);
   if (!resource) notFound();
 
-  const typeLabel = {
+  const typeLabels: Record<string, string> = {
     quran: "Qur'an resource",
     hadith: "Hadith reference",
     article: "Educational article",
     external: "External learning resource",
-  }[resource.resource_type] ?? "Learning resource";
+  };
+  const typeLabel = typeLabels[resource.resource_type] ?? "Learning resource";
 
   return (
     <PageShell
