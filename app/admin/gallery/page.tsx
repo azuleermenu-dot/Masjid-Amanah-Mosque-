@@ -30,6 +30,11 @@ export default async function ManageGalleryPage({ searchParams }: Props) {
     delete: "The gallery item could not be deleted.",
   };
 
+  const previews = items?.length ? await Promise.all(items.map(async (item) => {
+    const { data } = await supabase.storage.from("mosque-gallery").createSignedUrl(item.image_path, 3600);
+    return { ...item, previewUrl: data?.signedUrl ?? null };
+  })) : [];
+
   return (
     <main className="admin-dashboard">
       <header className="admin-topbar"><Link className="brand" href="/"><span className="brand-mark">۞</span><span className="brand-copy"><strong>MASJID AMANAH</strong><span className="arabic" lang="ar">مسجد الأمانة</span></span></Link><form action={signOutAdmin}><button className="admin-signout" type="submit">Sign out</button></form></header>
@@ -53,10 +58,9 @@ export default async function ManageGalleryPage({ searchParams }: Props) {
         </section>
 
         <section className="admin-list-section"><div className="admin-section-heading"><Images size={18} /><h2>Uploaded photographs</h2></div>
-          {error ? <p className="form-error">Unable to load gallery records.</p> : !items?.length ? <p className="admin-empty">No photographs have been uploaded.</p> : <div className="admin-list">{items.map((item) => {
-            const { data } = supabase.storage.from("mosque-gallery").getPublicUrl(item.image_path);
+          {error ? <p className="form-error">Unable to load gallery records.</p> : !previews.length ? <p className="admin-empty">No photographs have been uploaded.</p> : <div className="admin-list">{previews.map((item) => {
             return <article className="admin-list-row" key={item.id}>
-              <div className="admin-gallery-preview"><Image src={data.publicUrl} alt="" width={76} height={60} unoptimized /><div><strong>{item.title}</strong><span>{item.category || "Uncategorized"}</span></div></div>
+              <div className="admin-gallery-preview">{item.previewUrl ? <Image src={item.previewUrl} alt="" width={76} height={60} unoptimized /> : <span className="gallery-preview-missing">Preview unavailable</span>}<div><strong>{item.title}</strong><span>{item.category || "Uncategorized"}</span></div></div>
               <div className="admin-row-actions"><span className={item.is_published ? "published-badge" : "draft-badge"}>{item.is_published ? "Published" : "Draft"}</span><form action={deleteGalleryItem}><input type="hidden" name="id" value={item.id} /><button className="icon-danger" type="submit" aria-label={`Delete ${item.title}`}><Trash2 size={15} /></button></form></div>
             </article>;
           })}</div>}
