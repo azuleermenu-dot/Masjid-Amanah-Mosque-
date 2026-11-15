@@ -20,11 +20,11 @@ The public website runs without Supabase credentials and displays clearly marked
 
 ## Supabase setup
 1. Create a separate Supabase project specifically for Masjid Amanah. Do not reuse a different organization's project.
-2. Copy the project URL and publishable key into `.env.local` and the Vercel environment settings. Add the service-role key only as a server-side secret named `SUPABASE_SERVICE_ROLE_KEY`; never expose it in client code or a `NEXT_PUBLIC_*` variable.
+2. Copy the project URL and publishable key into `.env.local` and the Vercel environment settings. Add the secret key only as a server-side secret named `SUPABASE_SECRET_KEY`; never expose it in client code or a `NEXT_PUBLIC_*` variable.
 3. Apply `supabase/migrations/20261115000100_initial_masjid_content.sql` in the dedicated project's SQL editor.
 4. Invite/create the mosque-approved administrator through Supabase Auth.
 5. Update and run `supabase/authorize-first-admin.sql` with that administrator's exact verified email.
-6. Keep public sign-up disabled. Never put a service-role or secret key in browser variables.
+6. Keep public sign-up disabled. Never put a secret-key or secret key in browser variables.
 7. Test public reads and administrator writes with separate visitor and admin accounts.
 
 The existing connected Supabase project in the developer account belongs to another application and is intentionally not used by this repository.
@@ -37,7 +37,7 @@ The existing connected Supabase project in the developer account belongs to anot
 - Turnstile tokens are validated server-side, including action and configured hostname checks.
 - Gallery uploads are restricted to authorized admins. The storage bucket is private; public visitors can receive short-lived signed image URLs only for gallery records marked as published.
 - RLS is enabled on every table created by the migration.
-- The service-role key is used only by the isolated server-side contact submission module after Turnstile verification. It is never imported into client components or sent to the browser.
+- The secret key is used only by the isolated server-side contact submission module after Turnstile verification. It is never imported into client components or sent to the browser.
 
 ## Content accuracy
 This project deliberately does not invent the mosque's history, leaders, address, prayer schedule, teachers, programs, contact channels, photographs, or donation accounts. Only content confirmed by authorized Masjid Amanah representatives should be published. Qur'an and Hadith resources must retain reliable references and receive appropriate review.
