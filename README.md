@@ -34,7 +34,7 @@ The existing connected Supabase project in the developer account belongs to anot
 - Only user IDs explicitly listed in `public.admin_users` can manage content.
 - Admin membership changes are performed directly by a trusted project owner, not from the public app.
 - Contact inquiries can be submitted by visitors but can only be read and managed by authorized administrators.
-- Gallery uploads are restricted to authorized admins.
+- Gallery uploads are restricted to authorized admins. The storage bucket is private; public visitors can receive short-lived signed image URLs only for gallery records marked as published.
 - RLS is enabled on every table created by the migration.
 - No service-role key is used by the frontend.
 
