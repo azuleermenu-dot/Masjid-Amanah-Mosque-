@@ -82,3 +82,62 @@ export async function updateEventPublication(formData: FormData) {
   revalidatePath("/admin/events");
   redirect("/admin/events?saved=1");
 }
+
+
+export async function updateEvent(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  if (!/^[0-9a-f-]{36}$/i.test(id)) redirect("/admin/events?error=validation");
+
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) redirect("/admin/login?setup=required");
+
+  const { data: claims } = await supabase.auth.getClaims();
+  if (!claims?.claims?.sub) redirect("/admin/login");
+
+  const { data: admin } = await supabase
+    .from("admin_users")
+    .select("role")
+    .eq("user_id", claims.claims.sub)
+    .maybeSingle();
+  if (!admin) redirect("/admin/login?access=denied");
+
+  const title = String(formData.get("title") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const venue = String(formData.get("venue") ?? "").trim();
+  const startsAt = toPhilippinesIso(String(formData.get("starts_at") ?? ""));
+  const endsInput = String(formData.get("ends_at") ?? "");
+  const endsAt = endsInput ? toPhilippinesIso(endsInput) : null;
+  const isPublished = formData.get("is_published") === "on";
+
+  if (
+    title.length < 3 ||
+    title.length > 160 ||
+    description.length > 8000 ||
+    venue.length > 200 ||
+    !startsAt ||
+    (endsInput && !endsAt) ||
+    (endsAt && new Date(endsAt) < new Date(startsAt))
+  ) {
+    redirect(`/admin/events?edit=${id}&error=validation`);
+  }
+
+  const { error } = await supabase
+    .from("events")
+    .update({
+      title,
+      description,
+      venue: venue || null,
+      starts_at: startsAt,
+      ends_at: endsAt,
+      is_published: isPublished,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id);
+
+  if (error) redirect(`/admin/events?edit=${id}&error=save`);
+
+  revalidatePath("/programs");
+  revalidatePath("/admin");
+  revalidatePath("/admin/events");
+  redirect("/admin/events?updated=1");
+}
