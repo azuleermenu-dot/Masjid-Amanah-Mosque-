@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft, Clock3, ShieldCheck, Trash2 } from "lucide-react";
+import { ArrowLeft, Clock3, ShieldCheck, Trash2, CalendarPlus } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAdmin } from "@/app/admin/actions";
-import { savePrayerTime, deletePrayerTime, updatePrayerTimePublication } from "./actions";
+import { savePrayerTime, saveDailyPrayerSchedule, deletePrayerTime, updatePrayerTimePublication } from "./actions";
 
 export const metadata: Metadata = { title: "Manage Prayer Times", robots: { index: false, follow: false } };
-type Props = { searchParams: Promise<{ saved?: string; deleted?: string; error?: string }> };
+type Props = { searchParams: Promise<{ saved?: string; bulkSaved?: string; deleted?: string; error?: string }> };
 
 export default async function ManagePrayerTimesPage({ searchParams }: Props) {
   const params = await searchParams;
@@ -33,11 +33,33 @@ export default async function ManagePrayerTimesPage({ searchParams }: Props) {
         <div className="admin-title-row"><div><span className="eyebrow">Daily schedule</span><h1 className="display">Prayer times</h1><p>Enter only the actual timetable approved by mosque management. Times are interpreted as Philippines local time (UTC+8).</p></div><span className="status-pill"><ShieldCheck size={14} /> Authorized administrator</span></div>
 
         {params.saved === "1" && <p className="success-message" role="status">Prayer time saved or updated.</p>}
+        {params.bulkSaved === "1" && <p className="success-message" role="status">Daily prayer schedule saved or updated.</p>}
         {params.deleted === "1" && <p className="success-message" role="status">Prayer time deleted.</p>}
-        {params.error && <p className="form-error" role="alert">{params.error === "validation" ? "Check the date, prayer name, time, and note." : "The prayer time could not be saved. Confirm the database migration has been applied."}</p>}
+        {params.error && <p className="form-error" role="alert">{params.error === "empty" ? "Enter at least one prayer time before saving." : params.error === "validation" ? "Check the date, prayer name, time, and note." : params.error === "delete" ? "The prayer time could not be deleted." : "The prayer time could not be saved. Confirm the database migration has been applied."}</p>}
 
         <section className="admin-editor">
-          <div className="admin-section-heading"><Clock3 size={18} /><h2>Add or update a prayer time</h2></div>
+          <div className="admin-section-heading"><CalendarPlus size={18} /><h2>Set a full day schedule</h2></div>
+          <form action={saveDailyPrayerSchedule} className="admin-form">
+            <label htmlFor="bulk_prayer_date">Date · Philippines (UTC+8)</label>
+            <input id="bulk_prayer_date" name="prayer_date" type="date" required />
+            <div className="prayer-bulk-grid">
+              {["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Jummah"].map((name) => (
+                <div className="prayer-bulk-field" key={name}>
+                  <label htmlFor={`bulk-${name}`}>{name}</label>
+                  <input id={`bulk-${name}`} name={name} type="time" />
+                </div>
+              ))}
+            </div>
+            <label htmlFor="bulk_note">Schedule note (optional)</label>
+            <input id="bulk_note" name="note" maxLength={200} placeholder="Optional note for this day's schedule" />
+            <label className="checkbox-label"><input type="checkbox" name="is_published" /> Publish all entered times</label>
+            <button className="btn-primary admin-submit" type="submit">Save daily schedule</button>
+            <p className="form-hint">Leave fields blank for prayers without a supplied time. Existing entries for the same date and prayer name will be updated. No calculation is performed.</p>
+          </form>
+        </section>
+
+        <section className="admin-editor">
+          <div className="admin-section-heading"><Clock3 size={18} /><h2>Add or update a single prayer time</h2></div>
           <form action={savePrayerTime} className="admin-form">
             <label htmlFor="prayer_date">Date (Philippines)</label><input id="prayer_date" name="prayer_date" type="date" required />
             <label htmlFor="prayer_name">Prayer</label><select id="prayer_name" name="prayer_name" required defaultValue="Fajr"><option>Fajr</option><option>Sunrise</option><option>Dhuhr</option><option>Asr</option><option>Maghrib</option><option>Isha</option><option>Jummah</option></select>
