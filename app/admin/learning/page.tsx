@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { ArrowLeft, BookOpen, Pencil, ShieldCheck, Trash2 } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAdmin } from "@/app/admin/actions";
-import Link from "next/link";
 import { saveLearningResource, updateLearningResourcePublication, deleteLearningResource } from "./actions";
 
 export const metadata: Metadata = { title: "Manage Learning Resources", robots: { index: false, follow: false } };
