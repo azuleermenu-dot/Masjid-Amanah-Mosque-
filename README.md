@@ -47,7 +47,7 @@ This project deliberately does not invent the mosque's history, leaders, address
 2. Verify official address, contact channels, socials, prayer timetable, programs, and donation instructions.
 3. Add approved real mosque photos with permission.
 4. Configure the dedicated Supabase project and authorized administrators.
-5. Set the real Vercel production domain and update metadata/SEO configuration.
+5. Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS domain. Keep `PUBLIC_CONTENT_APPROVED=false` until mosque management approves the content and domain; switch it to `true` only after that review.
 6. Configure Cloudflare Turnstile site key, secret, and allowed production hostnames before enabling public contact submissions.
 7. Remove the temporary no-index setting in `app/robots.ts` only after public content and domain are verified.
 8. Run lint, production build, RLS checks, and mobile/tablet/desktop testing.
