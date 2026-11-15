@@ -104,6 +104,14 @@ export default async function AdminPage() {
             <div><span className="eyebrow">Transparent giving</span><h2>Donations</h2><p>Publish only payment details verified by mosque management.</p></div>
             <Link href="/admin/donations" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
           </section>
+          <section className="admin-module">
+            <div><span className="eyebrow">Approved photography</span><h2>Gallery</h2><p>Upload photographs with permission and accessibility descriptions.</p></div>
+            <Link href="/admin/gallery" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
+          </section>
+          <section className="admin-module">
+            <div><span className="eyebrow">Private correspondence</span><h2>Inquiries</h2><p>Review and triage contact messages received by the mosque.</p></div>
+            <Link href="/admin/inquiries" className="btn-primary">Open inbox <ArrowUpRight size={14} /></Link>
+          </section>
         </div>
 
         <div className="admin-security-note"><ShieldCheck size={18} /><p>Content permissions are enforced by Supabase Row Level Security. Only user IDs explicitly listed in the admin_users table can manage mosque content.</p></div>
