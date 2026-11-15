@@ -85,6 +85,10 @@ export default async function AdminPage() {
 
         <div className="admin-module-grid">
           <section className="admin-module">
+            <div><span className="eyebrow">Institution profile</span><h2>Mosque profile</h2><p>Update approved history, mission, facilities, address, and social links.</p></div>
+            <Link href="/admin/mosque-profile" className="btn-primary">Edit profile <ArrowUpRight size={14} /></Link>
+          </section>
+          <section className="admin-module">
             <div><span className="eyebrow">Content publishing</span><h2>Announcements</h2><p>Create and publish official mosque updates.</p></div>
             <Link href="/admin/announcements" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
           </section>
