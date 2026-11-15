@@ -4,6 +4,31 @@
 
 create extension if not exists pgcrypto;
 
+
+-- Verified public profile fields for the real mosque. Blank fields remain unpublished.
+create table if not exists public.mosque_profile (
+  id boolean primary key default true check (id = true),
+  introduction text not null default '' check (char_length(introduction) <= 5000),
+  history text not null default '' check (char_length(history) <= 5000),
+  mission text not null default '' check (char_length(mission) <= 3000),
+  vision text not null default '' check (char_length(vision) <= 3000),
+  facilities text[] not null default '{}'::text[],
+  community_information text not null default '' check (char_length(community_information) <= 5000),
+  address text not null default '' check (char_length(address) <= 500),
+  phone text not null default '' check (char_length(phone) <= 80),
+  email text not null default '' check (char_length(email) <= 254),
+  website_url text not null default '' check (char_length(website_url) <= 2000),
+  map_url text not null default '' check (char_length(map_url) <= 2000),
+  facebook_url text not null default '' check (char_length(facebook_url) <= 2000),
+  instagram_url text not null default '' check (char_length(instagram_url) <= 2000),
+  youtube_url text not null default '' check (char_length(youtube_url) <= 2000),
+  updated_by uuid references auth.users(id) on delete set null,
+  updated_at timestamptz not null default now()
+);
+
+insert into public.mosque_profile (id) values (true)
+on conflict (id) do nothing;
+
 create table if not exists public.admin_users (
   user_id uuid primary key references auth.users(id) on delete cascade,
   display_name text,
@@ -111,6 +136,7 @@ create index if not exists learning_resources_public_order_idx on public.learnin
 create index if not exists gallery_items_public_order_idx on public.gallery_items (created_at desc) where is_published = true;
 create index if not exists contact_inquiries_admin_order_idx on public.contact_inquiries (created_at desc);
 
+alter table public.mosque_profile enable row level security;
 alter table public.admin_users enable row level security;
 alter table public.announcements enable row level security;
 alter table public.events enable row level security;
@@ -119,6 +145,18 @@ alter table public.learning_resources enable row level security;
 alter table public.donation_methods enable row level security;
 alter table public.gallery_items enable row level security;
 alter table public.contact_inquiries enable row level security;
+
+grant select on public.mosque_profile to anon, authenticated;
+grant update on public.mosque_profile to authenticated;
+drop policy if exists "Public can view mosque profile" on public.mosque_profile;
+create policy "Public can view mosque profile"
+  on public.mosque_profile for select to anon, authenticated
+  using (id = true);
+drop policy if exists "Admins can update mosque profile" on public.mosque_profile;
+create policy "Admins can update mosque profile"
+  on public.mosque_profile for update to authenticated
+  using (exists (select 1 from public.admin_users a where a.user_id = (select auth.uid())))
+  with check (exists (select 1 from public.admin_users a where a.user_id = (select auth.uid())));
 
 -- Administrators can only read their own membership row. Membership changes are
 -- performed by a trusted project owner in the Supabase SQL editor, never by the app.
