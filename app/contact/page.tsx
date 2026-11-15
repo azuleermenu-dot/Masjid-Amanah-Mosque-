@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { MapPin, Mail, Phone, MessageCircle, ExternalLink, Globe } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { PendingPanel } from "@/components/pending-panel";
