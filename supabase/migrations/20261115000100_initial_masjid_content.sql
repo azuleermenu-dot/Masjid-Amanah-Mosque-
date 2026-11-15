@@ -12,6 +12,7 @@ create table if not exists public.mosque_profile (
   history text not null default '' check (char_length(history) <= 5000),
   mission text not null default '' check (char_length(mission) <= 3000),
   vision text not null default '' check (char_length(vision) <= 3000),
+  leadership_information text not null default '' check (char_length(leadership_information) <= 3000),
   facilities text[] not null default '{}'::text[],
   community_information text not null default '' check (char_length(community_information) <= 5000),
   address text not null default '' check (char_length(address) <= 500),
