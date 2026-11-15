@@ -42,7 +42,7 @@ export default async function AdminPage() {
           <span className="admin-emblem"><ShieldCheck size={22} /></span>
           <span className="eyebrow">Access restricted</span>
           <h1 className="display">Administrator access required.</h1>
-          <p>This account is authenticated but is not listed as an authorized Masjid Amanah administrator. Contact the mosque's approved website owner.</p>
+          <p>This account is authenticated but is not listed as an authorized Masjid Amanah administrator. Contact the mosque&apos;s approved website owner.</p>
           <form action={signOutAdmin}><button className="btn-primary admin-submit" type="submit">Sign out</button></form>
         </section>
       </main>
@@ -93,7 +93,7 @@ export default async function AdminPage() {
             <Link href="/admin/announcements" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
           </section>
           <section className="admin-module">
-            <div><span className="eyebrow">Daily schedule</span><h2>Prayer times</h2><p>Enter the mosque's approved daily timetable.</p></div>
+            <div><span className="eyebrow">Daily schedule</span><h2>Prayer times</h2><p>Enter the mosque&apos;s approved daily timetable.</p></div>
             <Link href="/admin/prayer-times" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
           </section>
           <section className="admin-module">
