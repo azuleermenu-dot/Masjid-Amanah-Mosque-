@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { BookOpen, Users, CalendarDays, MoonStar } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { PendingPanel } from "@/components/pending-panel";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Programs & Activities" };
 
@@ -12,13 +13,22 @@ const categories = [
   { icon: MoonStar, title: "Ramadan & Eid", text: "Seasonal announcements will be shared by the mosque." },
 ];
 
-export default function ProgramsPage() {
+export default async function ProgramsPage() {
+  const supabase = await createSupabaseServerClient();
+  const { data: events, error } = supabase
+    ? await supabase.from("events").select("id,title,description,venue,starts_at,ends_at").eq("is_published", true).gte("starts_at", new Date().toISOString()).order("starts_at", { ascending: true }).limit(20)
+    : { data: null, error: null };
+
   return (
     <PageShell eyebrow="Community · المجتمع" title="Come together, learn, and grow." description="Explore the mosque's classes, events, and community activities.">
-      <div className="feature-grid">
-        {categories.map(({ icon: Icon, title, text }) => <article className="feature-card" key={title}><Icon size={23} /><h2>{title}</h2><p>{text}</p></article>)}
+      <div className="feature-grid">{categories.map(({ icon: Icon, title, text }) => <article className="feature-card" key={title}><Icon size={23} /><h2>{title}</h2><p>{text}</p></article>)}</div>
+      <div className="event-section"><span className="eyebrow">Upcoming events</span><h2 className="display">Gatherings at Masjid Amanah.</h2>
+        {events?.length ? <div className="event-list">{events.map((event) => <article className="event-row" key={event.id}>
+          <div><strong>{event.title}</strong><p>{event.description}</p>{event.venue && <small>{event.venue}</small>}</div>
+          <time dateTime={event.starts_at}>{new Intl.DateTimeFormat("en-PH", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Manila" }).format(new Date(event.starts_at))}</time>
+        </article>)}</div> : <p className="subtle-copy">{error ? "The events feed could not be loaded." : "No upcoming events have been published yet."}</p>}
       </div>
-      <PendingPanel title="Program schedule pending approval." description="No class, teacher, event, or schedule is listed as confirmed until the mosque provides and approves the details." />
+      {!supabase && <PendingPanel title="Live programs are not connected yet." description="Published mosque activities will appear here after the dedicated content database is configured." />}
     </PageShell>
   );
 }
