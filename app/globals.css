@@ -439,3 +439,14 @@ button { font: inherit; }
 
 .small-admin-link { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:30px; padding:0 9px; border:1px solid var(--line); background:#fff; color:var(--green); font-size:10px; white-space:nowrap; }
 .small-admin-link:hover { border-color:var(--gold); }
+
+
+/* Content editor navigation */
+.admin-form-actions { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.admin-cancel-link { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 14px; border:1px solid var(--line); color:var(--muted); font-size:11px; }
+.admin-cancel-link:hover { border-color:var(--gold); color:var(--green); }
+.edit-admin-link { display:inline-flex; align-items:center; gap:6px; text-decoration:none; }
+@media(max-width:520px) {
+  .admin-form-actions { align-items:stretch; flex-direction:column; }
+  .admin-form-actions>* { width:100%; }
+}
