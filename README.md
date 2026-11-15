@@ -3,8 +3,9 @@
 A responsive official website foundation for Masjid Amanah (مسجد الأمانة).
 
 ## Technology
-- Next.js 15 / React 19 / TypeScript
+- Next.js 16.4.6 / React 19.3.1 / TypeScript
 - Tailwind CSS v4
+- ESLint 10 with the native Next.js flat configuration
 - Framer Motion and Lucide icons
 - Supabase Auth, PostgreSQL, and Storage (optional until a dedicated mosque project is connected)
 - Vercel deployment target
