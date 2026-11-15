@@ -9,13 +9,14 @@ export const metadata: Metadata = { title: "About the Mosque" };
 export default async function AboutPage() {
   const supabase = await createSupabaseServerClient();
   const { data: profile, error } = supabase
-    ? await supabase.from("mosque_profile").select("introduction,history,mission,vision,facilities,community_information").eq("id", true).maybeSingle()
+    ? await supabase.from("mosque_profile").select("introduction,history,mission,vision,leadership_information,facilities,community_information").eq("id", true).maybeSingle()
     : { data: null, error: null };
 
   const sections = [
     { key: "history", label: "Our story", icon: Building2, value: profile?.history },
     { key: "mission", label: "Our mission", icon: Goal, value: profile?.mission },
     { key: "vision", label: "Our vision", icon: Eye, value: profile?.vision },
+    { key: "leadership_information", label: "Leadership & administration", icon: Users, value: profile?.leadership_information },
     { key: "community_information", label: "Our community", icon: Users, value: profile?.community_information },
   ].filter((section) => section.value?.trim());
 
