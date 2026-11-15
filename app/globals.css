@@ -396,3 +396,5 @@ button { font: inherit; }
 .profile-save-note { margin:18px 0 0; padding:13px 15px; background:#eef1e9; color:var(--green); font-size:10px; line-height:1.7; }
 .profile-admin-form .admin-editor { margin-top:24px; }
 @media(max-width:700px) { .facility-section ul { grid-template-columns:1fr; } .profile-section { grid-template-columns:40px 1fr; gap:13px; } }
+
+.prayer-empty { margin:0; padding:22px 10px; color:var(--muted); font-size:11px; }
