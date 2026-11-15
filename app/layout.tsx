@@ -30,7 +30,6 @@ export const metadata: Metadata = {
   description:
     "The official digital home of Masjid Amanah. Find mosque updates, prayer information, community programs, and ways to get in touch.",
   applicationName: "Masjid Amanah",
-  metadataBase: new URL("https://masjid-amanah.example"),
   openGraph: {
     title: "Masjid Amanah | مسجد الأمانة",
     description: "A place of worship, knowledge, unity, and community.",
