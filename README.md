@@ -20,7 +20,7 @@ The public website runs without Supabase credentials and displays clearly marked
 
 ## Supabase setup
 1. Create a separate Supabase project specifically for Masjid Amanah. Do not reuse a different organization's project.
-2. Copy the project URL and publishable key into `.env.local` and the Vercel environment settings.
+2. Copy the project URL and publishable key into `.env.local` and the Vercel environment settings. Add the service-role key only as a server-side secret named `SUPABASE_SERVICE_ROLE_KEY`; never expose it in client code or a `NEXT_PUBLIC_*` variable.
 3. Apply `supabase/migrations/20261115000100_initial_masjid_content.sql` in the dedicated project's SQL editor.
 4. Invite/create the mosque-approved administrator through Supabase Auth.
 5. Update and run `supabase/authorize-first-admin.sql` with that administrator's exact verified email.
@@ -33,11 +33,11 @@ The existing connected Supabase project in the developer account belongs to anot
 - Public visitors can read published announcements, events, prayer times, learning resources, verified donation methods, and published gallery entries.
 - Only user IDs explicitly listed in `public.admin_users` can manage content.
 - Admin membership changes are performed directly by a trusted project owner, not from the public app.
-- Contact inquiries can be submitted after Cloudflare Turnstile is configured, and can only be read and managed by authorized administrators.
+- Contact inquiries can be submitted after Cloudflare Turnstile is configured. The server verifies the token and inserts through a server-only service client; direct public REST inserts are revoked. Only authorized administrators can read and manage inquiries.
 - Turnstile tokens are validated server-side, including action and configured hostname checks.
 - Gallery uploads are restricted to authorized admins. The storage bucket is private; public visitors can receive short-lived signed image URLs only for gallery records marked as published.
 - RLS is enabled on every table created by the migration.
-- No service-role key is used by the frontend.
+- The service-role key is used only by the isolated server-side contact submission module after Turnstile verification. It is never imported into client components or sent to the browser.
 
 ## Content accuracy
 This project deliberately does not invent the mosque's history, leaders, address, prayer schedule, teachers, programs, contact channels, photographs, or donation accounts. Only content confirmed by authorized Masjid Amanah representatives should be published. Qur'an and Hadith resources must retain reliable references and receive appropriate review.

@@ -2,7 +2,7 @@
 
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export type ContactFormState = {
   success: boolean;
@@ -97,9 +97,9 @@ export async function submitContactInquiry(
     return { success: false, message: "Security verification is temporarily unavailable. Please try again later." };
   }
 
-  const supabase = await createSupabaseServerClient();
+  const supabase = createSupabaseAdminClient();
   if (!supabase) {
-    return { success: false, message: "The message service is not connected yet. Please try again later." };
+    return { success: false, message: "The secure message service is not configured yet. Please try again later." };
   }
 
   const { error } = await supabase.from("contact_inquiries").insert({
