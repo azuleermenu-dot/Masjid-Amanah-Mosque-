@@ -42,7 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createSupabaseServerClient();
   if (!supabase) return staticEntries;
 
-  const [{ data: announcements }, { data: learningResources }] = await Promise.all([
+  const [announcementResult, learningResult] = await Promise.all([
     supabase
       .from("announcements")
       .select("slug,published_at")
@@ -57,18 +57,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .limit(500),
   ]);
 
-  const announcementEntries: MetadataRoute.Sitemap = (announcements ?? []).map((item) => ({
+  const announcementEntries: MetadataRoute.Sitemap = (announcementResult.data ?? []).map((item) => ({
     url: `${base}/news/${encodeURIComponent(item.slug)}`,
     lastModified: item.published_at ? new Date(item.published_at) : undefined,
     changeFrequency: "monthly",
     priority: 0.5,
   }));
 
-  const learningEntries: MetadataRoute.Sitemap = (learningResources ?? []).map((item) => ({
-    url: `${base}/learning/${item.id}`,
+  const learningEntries: MetadataRoute.Sitemap = (learningResult.data ?? []).map((item) => ({
+    url: `${base}/learning/${encodeURIComponent(item.id)}`,
     lastModified: item.updated_at ? new Date(item.updated_at) : undefined,
-    changeFrequency: "yearly",
-    priority: 0.4,
+    changeFrequency: "monthly",
+    priority: 0.5,
   }));
 
   return [...staticEntries, ...announcementEntries, ...learningEntries];
