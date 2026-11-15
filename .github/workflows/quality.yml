@@ -1,4 +1,4 @@
-name: Build and lint
+name: Build, audit, and lint
 
 on:
   push:
@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   quality:
@@ -17,6 +24,19 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install
+      - name: Report dependency audit
+        run: |
+          npm audit --json > npm-audit.json || true
+          node <<'NODE'
+          const fs = require("node:fs");
+          const audit = JSON.parse(fs.readFileSync("npm-audit.json", "utf8"));
+          console.log("Dependency audit totals:", audit.metadata?.vulnerabilities ?? {});
+          for (const [name, item] of Object.entries(audit.vulnerabilities ?? {})) {
+            console.log(
+              `${item.severity.toUpperCase()}: ${name}; direct=${item.isDirect}; fix=${JSON.stringify(item.fixAvailable)}`
+            );
+          }
+          NODE
       - name: Type check
         run: npx tsc --noEmit
       - name: Production build
