@@ -329,3 +329,12 @@ button { font: inherit; }
   .event-row { flex-direction:column; gap:8px; }
   .event-row time { text-align:left; }
 }
+
+
+/* Admin form controls and additional page layout */
+.admin-form select { width:100%; border:1px solid #dfe2d8; background:#fff; color:var(--ink); padding:13px 14px; border-radius:0; font:12px var(--font-sans),sans-serif; outline:none; }
+.admin-form select:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(185,155,99,.12); }
+.admin-row-actions { display:flex; align-items:center; gap:10px; }
+.icon-danger { display:grid; place-items:center; width:32px; height:32px; border:1px solid #ead8d5; background:#fff8f7; color:#9c463e; cursor:pointer; }
+.icon-danger:hover { background:#f8e6e2; }
+@media(max-width:520px) { .admin-row-actions { gap:6px; }.admin-list-row { align-items:flex-start; } }
