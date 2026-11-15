@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Clock3, HeartHandshake, MapPin, Megaphone, Users } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpen, Clock3, HeartHandshake, MapPin, Megaphone, Users } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
