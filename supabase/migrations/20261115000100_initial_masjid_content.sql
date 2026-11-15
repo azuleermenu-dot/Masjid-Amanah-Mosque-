@@ -211,9 +211,12 @@ create policy "Admins can review contact inquiries"
 
 -- Gallery files are publicly readable only because each public gallery item uses
 -- approved imagery. Uploads and mutations remain restricted to mosque admins.
-insert into storage.buckets (id, name, public)
-values ('mosque-gallery', 'mosque-gallery', true)
-on conflict (id) do update set public = excluded.public;
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('mosque-gallery', 'mosque-gallery', true, 5242880, array['image/jpeg', 'image/png', 'image/webp'])
+on conflict (id) do update
+set public = excluded.public,
+    file_size_limit = excluded.file_size_limit,
+    allowed_mime_types = excluded.allowed_mime_types;
 
 drop policy if exists "Public can view approved mosque gallery files" on storage.objects;
 create policy "Public can view approved mosque gallery files"
