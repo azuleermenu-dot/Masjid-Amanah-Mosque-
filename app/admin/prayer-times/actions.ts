@@ -21,7 +21,11 @@ export async function savePrayerTime(formData: FormData) {
   const isPublished = formData.get("is_published") === "on";
   const validNames = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Jummah"];
 
-  if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(prayerDate) || Number.isNaN(Date.parse(`${prayerDate}T00:00:00Z`)) ||
+  const [year, month, day] = prayerDate.split("-").map(Number);
+  const validCalendarDate = prayerDate.length === 10 && !Number.isNaN(Date.UTC(year, month - 1, day)) &&
+    new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10) === prayerDate;
+
+  if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(prayerDate) || !validCalendarDate ||
       !validNames.includes(prayerName) || !/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(prayerTime) || note.length > 200) {
     redirect("/admin/prayer-times?error=validation");
   }
