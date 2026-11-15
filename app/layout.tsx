@@ -22,6 +22,9 @@ const arabic = Noto_Naskh_Arabic({
   display: "swap",
 });
 
+const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const approvedForIndexing = process.env.PUBLIC_CONTENT_APPROVED === "true" && Boolean(publicSiteUrl);
+
 export const metadata: Metadata = {
   title: {
     default: "Masjid Amanah | مسجد الأمانة",
@@ -30,13 +33,14 @@ export const metadata: Metadata = {
   description:
     "The official digital home of Masjid Amanah. Find mosque updates, prayer information, community programs, and ways to get in touch.",
   applicationName: "Masjid Amanah",
+  metadataBase: publicSiteUrl ? new URL(publicSiteUrl) : undefined,
   openGraph: {
     title: "Masjid Amanah | مسجد الأمانة",
     description: "A place of worship, knowledge, unity, and community.",
     type: "website",
     siteName: "Masjid Amanah",
   },
-  robots: { index: false, follow: false },
+  robots: { index: approvedForIndexing, follow: approvedForIndexing },
 };
 
 export const viewport: Viewport = {
