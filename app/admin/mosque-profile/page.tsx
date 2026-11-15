@@ -39,6 +39,7 @@ export default async function MosqueProfileAdminPage({ searchParams }: Props) {
               <label htmlFor="history">History and establishment</label><textarea id="history" name="history" rows={5} maxLength={5000} defaultValue={profile?.history ?? ""} />
               <label htmlFor="mission">Mission</label><textarea id="mission" name="mission" rows={3} maxLength={3000} defaultValue={profile?.mission ?? ""} />
               <label htmlFor="vision">Vision</label><textarea id="vision" name="vision" rows={3} maxLength={3000} defaultValue={profile?.vision ?? ""} />
+              <label htmlFor="leadership_information">Leadership and administration</label><textarea id="leadership_information" name="leadership_information" rows={4} maxLength={3000} defaultValue={profile?.leadership_information ?? ""} />
               <label htmlFor="facilities">Facilities (one item per line)</label><textarea id="facilities" name="facilities" rows={4} maxLength={4000} defaultValue={facilityText} placeholder={"Prayer hall\nAblution area"} />
               <label htmlFor="community_information">Community involvement and services</label><textarea id="community_information" name="community_information" rows={4} maxLength={5000} defaultValue={profile?.community_information ?? ""} />
             </div>
