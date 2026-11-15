@@ -458,3 +458,18 @@ button { font: inherit; }
 .calendar-download { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:42px; padding:0 14px; border:1px solid var(--green); color:var(--green); font-size:11px; font-weight:700; white-space:nowrap; transition:background .2s,color .2s; }
 .calendar-download:hover { background:var(--green); color:white; }
 @media(max-width:640px) { .event-section-heading { align-items:flex-start; flex-direction:column; } }
+
+
+/* Readable Islamic learning article detail */
+.resource-read-link { display:inline-flex; align-items:center; gap:7px; color:var(--green); font-size:11px; font-weight:700; }
+.resource-card a { width:fit-content; }
+.learning-detail { max-width:850px; margin:0 auto; padding:28px; border:1px solid var(--line); background:var(--paper); }
+.learning-detail-meta { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; padding-bottom:18px; border-bottom:1px solid var(--line); color:var(--muted); font-size:10px; }
+.learning-detail-meta>span { color:var(--green); }
+.learning-detail-body { padding:28px 0; color:var(--ink); font-size:14px; line-height:2; white-space:pre-wrap; overflow-wrap:anywhere; }
+.learning-empty-body { display:flex; align-items:flex-start; gap:12px; padding:24px 0; color:var(--muted); font-size:12px; line-height:1.8; }
+.learning-empty-body svg { flex:none; color:var(--gold); }
+.learning-empty-body p { margin:0; }
+.learning-source-link { display:inline-flex; align-items:center; gap:8px; min-height:42px; padding:0 14px; background:var(--green); color:white; font-size:11px; font-weight:700; }
+.learning-review-note { margin-top:22px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:10px; }
+@media(max-width:520px) { .learning-detail { padding:20px; } .learning-detail-body { font-size:13px; } }
