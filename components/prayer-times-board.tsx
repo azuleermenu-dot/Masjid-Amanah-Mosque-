@@ -16,13 +16,18 @@ function toManilaTimestamp(date: string, time: string) {
   return new Date(`${date}T${time}+08:00`).getTime();
 }
 
-export function PrayerTimesBoard({ entries }: { entries: PrayerEntry[] }) {
+export function PrayerTimesBoard({ entries, today }: { entries: PrayerEntry[]; today: string }) {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 30_000);
     return () => window.clearInterval(timer);
   }, []);
+
+  const todayEntries = useMemo(
+    () => entries.filter((entry) => entry.prayer_date === today),
+    [entries, today],
+  );
 
   const nextPrayer = useMemo(() => entries
     .filter((entry) => CORE_PRAYERS.has(entry.prayer_name))
@@ -33,6 +38,7 @@ export function PrayerTimesBoard({ entries }: { entries: PrayerEntry[] }) {
   const remaining = nextPrayer ? Math.max(0, nextPrayer.timestamp - now) : 0;
   const hours = Math.floor(remaining / 3_600_000);
   const minutes = Math.floor((remaining % 3_600_000) / 60_000);
+  const nextDay = nextPrayer && nextPrayer.prayer_date !== today;
 
   return (
     <div className="prayer-board">
@@ -41,16 +47,18 @@ export function PrayerTimesBoard({ entries }: { entries: PrayerEntry[] }) {
         {nextPrayer ? <>
           <strong>{nextPrayer.prayer_name}</strong>
           <span>{formatTime(nextPrayer.prayer_time)}</span>
-          <small>{hours > 0 ? `${hours}h ` : ""}{minutes}m remaining · Asia/Manila</small>
+          <small>{nextDay ? "Tomorrow · " : ""}{hours > 0 ? `${hours}h ` : ""}{minutes}m remaining · Asia/Manila</small>
         </> : <>
           <strong>No upcoming prayer time posted.</strong>
           <small>Check the mosque&apos;s latest confirmed timetable.</small>
         </>}
       </div>
       <div className="prayer-table">
-        {entries.map((entry) => <div className="prayer-row" key={entry.id}><span>{entry.prayer_name}</span><strong>{formatTime(entry.prayer_time)}</strong></div>)}
+        {todayEntries.length ? todayEntries.map((entry) => (
+          <div className="prayer-row" key={entry.id}><span>{entry.prayer_name}</span><strong>{formatTime(entry.prayer_time)}</strong></div>
+        )) : <p className="prayer-empty">No prayer times have been published for today.</p>}
       </div>
-      <p className="prayer-footnote"><Clock3 size={14} /> Official mosque timetable · Philippines time (UTC+8)</p>
+      <p className="prayer-footnote"><Clock3 size={14} /> Today&apos;s official mosque timetable · Philippines time (UTC+8)</p>
     </div>
   );
 }
