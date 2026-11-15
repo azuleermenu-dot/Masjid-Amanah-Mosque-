@@ -59,7 +59,7 @@ export default function Home() {
               <h2 className="display">A home for worship, learning, and connection.</h2>
             </div>
             <div className="welcome-copy">
-              <p>Masjid Amanah's website brings together practical mosque information, community updates, learning resources, and ways to stay connected.</p>
+              <p>Masjid Amanah&apos;s website brings together practical mosque information, community updates, learning resources, and ways to stay connected.</p>
               <p>Information specific to the mosque will be published only after it has been confirmed by its authorized representatives.</p>
               <Link href="/about" className="text-link">About Masjid Amanah <ArrowUpRight size={15} /></Link>
             </div>
