@@ -44,7 +44,7 @@ export function PrayerTimesBoard({ entries }: { entries: PrayerEntry[] }) {
           <small>{hours > 0 ? `${hours}h ` : ""}{minutes}m remaining · Asia/Manila</small>
         </> : <>
           <strong>No upcoming prayer time posted.</strong>
-          <small>Check the mosque's latest confirmed timetable.</small>
+          <small>Check the mosque&apos;s latest confirmed timetable.</small>
         </>}
       </div>
       <div className="prayer-table">
