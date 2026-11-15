@@ -40,15 +40,15 @@ export default async function ManageLearningPage({ searchParams }: Props) {
         <section className="admin-editor"><div className="admin-section-heading"><BookOpen size={18} /><h2>Add learning resource</h2></div>
           <form action={saveLearningResource} className="admin-form">
             <label htmlFor="title">Title</label><input id="title" name="title" required minLength={3} maxLength={180} />
-            <label htmlFor="resource_type">Resource type</label><select id="resource_type" name="resource_type" defaultValue="article"><option value="article">Educational article</option><option value="quran">Qur'an resource</option><option value="hadith">Hadith reference</option><option value="external">External learning link</option></select>
+            <label htmlFor="resource_type">Resource type</label><select id="resource_type" name="resource_type" defaultValue="article"><option value="article">Educational article</option><option value="quran">Qur&apos;an resource</option><option value="hadith">Hadith reference</option><option value="external">External learning link</option></select>
             <label htmlFor="summary">Summary</label><input id="summary" name="summary" maxLength={500} />
-            <label htmlFor="source_reference">Source reference (required for Qur'an and Hadith)</label><input id="source_reference" name="source_reference" maxLength={300} placeholder="Surah and ayah, or collection and hadith reference" />
+            <label htmlFor="source_reference">Source reference (required for Qur&apos;an and Hadith)</label><input id="source_reference" name="source_reference" maxLength={300} placeholder="Surah and ayah, or collection and hadith reference" />
             <label htmlFor="body">Article or study notes</label><textarea id="body" name="body" rows={5} maxLength={12000} />
             <label htmlFor="external_url">External URL (optional)</label><input id="external_url" name="external_url" type="url" maxLength={2000} placeholder="https://" />
             <label htmlFor="reviewed_by">Reviewed by</label><input id="reviewed_by" name="reviewed_by" maxLength={120} placeholder="Reviewer or authorized scholar" />
             <label className="checkbox-label"><input type="checkbox" name="is_published" /> Publish after review</label>
             <button className="btn-primary admin-submit" type="submit">Save learning resource</button>
-            <p className="form-hint">Published items require a reviewer. Qur'an and Hadith records must include a precise source reference. Do not add unverified rulings or attributions.</p>
+            <p className="form-hint">Published items require a reviewer. Qur&apos;an and Hadith records must include a precise source reference. Do not add unverified rulings or attributions.</p>
           </form>
         </section>
 
