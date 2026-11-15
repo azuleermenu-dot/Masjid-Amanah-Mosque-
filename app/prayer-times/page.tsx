@@ -13,16 +13,23 @@ function getManilaDate() {
   return `${values.year}-${values.month}-${values.day}`;
 }
 
+function getNextManilaDate(today: string) {
+  const date = new Date(`${today}T00:00:00+08:00`);
+  date.setUTCDate(date.getUTCDate() + 1);
+  return date.toISOString().slice(0, 10);
+}
+
 export default async function PrayerTimesPage() {
   const supabase = await createSupabaseServerClient();
   const today = getManilaDate();
+  const tomorrow = getNextManilaDate(today);
   const { data: entries, error } = supabase
-    ? await supabase.from("prayer_times").select("id,prayer_name,prayer_time,prayer_date").eq("prayer_date", today).eq("is_published", true).order("prayer_time", { ascending: true })
+    ? await supabase.from("prayer_times").select("id,prayer_name,prayer_time,prayer_date").gte("prayer_date", today).lte("prayer_date", tomorrow).eq("is_published", true).order("prayer_date", { ascending: true }).order("prayer_time", { ascending: true })
     : { data: null, error: null };
 
   return (
     <PageShell eyebrow="Prayer information · مواقيت الصلاة" title="Make space for prayer." description="Find the mosque&apos;s official prayer schedule and congregational information.">
-      {entries?.length ? <PrayerTimesBoard entries={entries} /> : <>
+      {entries?.length ? <PrayerTimesBoard entries={entries} today={today} /> : <>
         <div className="prayer-toolbar"><div><span className="eyebrow">Daily timetable</span><h2>Prayer times</h2><p>Today&apos;s date · {today} · Asia/Manila</p></div><span className="status-pill"><CalendarDays size={14} /> Not yet published</span></div>
         <PendingPanel title="Official timetable required." description={error ? "The prayer timetable could not be loaded. Please check the database setup." : "No verified prayer schedule has been published for today. No prayer times or countdown are generated. Please refer to mosque management for the current congregational schedule."} />
       </>}
