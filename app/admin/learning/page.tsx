@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft, BookOpen, ShieldCheck } from "lucide-react";
+import { ArrowLeft, BookOpen, ShieldCheck, Trash2 } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAdmin } from "@/app/admin/actions";
-import { saveLearningResource } from "./actions";
+import { saveLearningResource, updateLearningResourcePublication, deleteLearningResource } from "./actions";
 
 export const metadata: Metadata = { title: "Manage Learning Resources", robots: { index: false, follow: false } };
-type Props = { searchParams: Promise<{ saved?: string; error?: string }> };
+type Props = { searchParams: Promise<{ saved?: string; deleted?: string; error?: string }> };
 
 export default async function ManageLearningPage({ searchParams }: Props) {
   const params = await searchParams;
@@ -26,6 +26,8 @@ export default async function ManageLearningPage({ searchParams }: Props) {
     validation: "Check the title, resource type, reference, and reviewer details.",
     url: "Only valid HTTP or HTTPS links are accepted.",
     save: "The resource could not be saved. Check the database migration and permissions.",
+    review: "A reviewer and, where required, a source reference must be added before publishing.",
+    delete: "The learning resource could not be deleted.",
   };
 
   return (
@@ -34,7 +36,8 @@ export default async function ManageLearningPage({ searchParams }: Props) {
       <div className="admin-dashboard-wrap">
         <Link href="/admin" className="admin-back"><ArrowLeft size={14} /> Dashboard</Link>
         <div className="admin-title-row"><div><span className="eyebrow">Reviewed learning content</span><h1 className="display">Islamic learning</h1><p>Publish educational material only with reliable references and appropriate review.</p></div><span className="status-pill"><ShieldCheck size={14} /> Authorized administrator</span></div>
-        {params.saved === "1" && <p className="success-message" role="status">Learning resource saved.</p>}
+        {params.saved === "1" && <p className="success-message" role="status">Learning resource saved or updated.</p>}
+        {params.deleted === "1" && <p className="success-message" role="status">Learning resource deleted.</p>}
         {params.error && <p className="form-error" role="alert">{messages[params.error] ?? "The request could not be completed."}</p>}
 
         <section className="admin-editor"><div className="admin-section-heading"><BookOpen size={18} /><h2>Add learning resource</h2></div>
@@ -53,7 +56,17 @@ export default async function ManageLearningPage({ searchParams }: Props) {
         </section>
 
         <section className="admin-list-section"><div className="admin-section-heading"><BookOpen size={18} /><h2>Saved learning resources</h2></div>
-          {error ? <p className="form-error">Unable to load resources.</p> : !resources?.length ? <p className="admin-empty">No learning resources have been saved.</p> : <div className="admin-list">{resources.map((item) => <article className="admin-list-row" key={item.id}><div><strong>{item.title}</strong><span>{item.resource_type} · {item.source_reference || "No source reference"}{item.reviewed_by ? ` · Reviewed by ${item.reviewed_by}` : ""}</span></div><span className={item.is_published ? "published-badge" : "draft-badge"}>{item.is_published ? "Published" : "Draft"}</span></article>)}</div>}
+          {error ? <p className="form-error">Unable to load resources.</p> : !resources?.length ? <p className="admin-empty">No learning resources have been saved.</p> : <div className="admin-list">{resources.map((item) => <article className="admin-list-row" key={item.id}>
+              <div><strong>{item.title}</strong><span>{item.resource_type} · {item.source_reference || "No source reference"}{item.reviewed_by ? ` · Reviewed by ${item.reviewed_by}` : ""}</span></div>
+              <div className="admin-row-actions">
+                <form action={updateLearningResourcePublication} className="inline-status-form">
+                  <input type="hidden" name="id" value={item.id} />
+                  <label className="inline-checkbox"><input type="checkbox" name="is_published" defaultChecked={item.is_published} /> Publish</label>
+                  <button className="small-admin-button" type="submit">Update</button>
+                </form>
+                <form action={deleteLearningResource}><input type="hidden" name="id" value={item.id} /><button className="icon-danger" type="submit" aria-label={`Delete ${item.title}`}><Trash2 size={15} /></button></form>
+              </div>
+            </article>)}</div>}
         </section>
       </div>
     </main>

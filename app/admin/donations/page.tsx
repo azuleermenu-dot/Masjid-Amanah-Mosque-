@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft, HeartHandshake, ShieldCheck } from "lucide-react";
+import { ArrowLeft, HeartHandshake, ShieldCheck, Trash2 } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAdmin } from "@/app/admin/actions";
-import { saveDonationMethod } from "./actions";
+import { saveDonationMethod, updateDonationMethodPublication, deleteDonationMethod } from "./actions";
 
 export const metadata: Metadata = { title: "Manage Donations", robots: { index: false, follow: false } };
-type Props = { searchParams: Promise<{ saved?: string; error?: string }> };
+type Props = { searchParams: Promise<{ saved?: string; deleted?: string; error?: string }> };
 
 export default async function ManageDonationsPage({ searchParams }: Props) {
   const params = await searchParams;
@@ -28,8 +28,9 @@ export default async function ManageDonationsPage({ searchParams }: Props) {
       <div className="admin-dashboard-wrap">
         <Link href="/admin" className="admin-back"><ArrowLeft size={14} /> Dashboard</Link>
         <div className="admin-title-row"><div><span className="eyebrow">Transparent giving</span><h1 className="display">Donation methods</h1><p>Publish payment information only after checking it directly with the mosque.</p></div><span className="status-pill"><ShieldCheck size={14} /> Authorized administrator</span></div>
-        {params.saved === "1" && <p className="success-message" role="status">Donation method saved.</p>}
-        {params.error && <p className="form-error" role="alert">{params.error === "validation" ? "Complete all required fields and confirm verification before publishing." : "The donation method could not be saved."}</p>}
+        {params.saved === "1" && <p className="success-message" role="status">Donation method saved or updated.</p>}
+        {params.deleted === "1" && <p className="success-message" role="status">Donation method deleted.</p>}
+        {params.error && <p className="form-error" role="alert">{params.error === "validation" ? "Complete all required fields and confirm verification before publishing." : params.error === "verification" ? "This record has no verification record. Re-enter and confirm the exact payment information before publishing." : params.error === "delete" ? "The donation method could not be deleted." : "The donation method could not be saved."}</p>}
 
         <section className="admin-editor">
           <div className="admin-section-heading"><HeartHandshake size={18} /><h2>Add donation instructions</h2></div>
@@ -47,7 +48,17 @@ export default async function ManageDonationsPage({ searchParams }: Props) {
         </section>
 
         <section className="admin-list-section"><div className="admin-section-heading"><HeartHandshake size={18} /><h2>Saved donation methods</h2></div>
-          {error ? <p className="form-error">Unable to load donation methods.</p> : !methods?.length ? <p className="admin-empty">No donation methods have been added.</p> : <div className="admin-list">{methods.map((method) => <article className="admin-list-row" key={method.id}><div><strong>{method.label}</strong><span>{method.purpose || "No purpose description"}{method.verified_by ? ` · Verified by ${method.verified_by}` : ""}</span></div><span className={method.is_published ? "published-badge" : "draft-badge"}>{method.is_published ? "Published" : "Draft"}</span></article>)}</div>}
+          {error ? <p className="form-error">Unable to load donation methods.</p> : !methods?.length ? <p className="admin-empty">No donation methods have been added.</p> : <div className="admin-list">{methods.map((method) => <article className="admin-list-row" key={method.id}>
+              <div><strong>{method.label}</strong><span>{method.purpose || "No purpose description"}{method.verified_by ? ` · Verified by ${method.verified_by}` : ""}</span></div>
+              <div className="admin-row-actions">
+                <form action={updateDonationMethodPublication} className="inline-status-form">
+                  <input type="hidden" name="id" value={method.id} />
+                  <label className="inline-checkbox"><input type="checkbox" name="is_published" defaultChecked={method.is_published} /> Publish</label>
+                  <button className="small-admin-button" type="submit">Update</button>
+                </form>
+                <form action={deleteDonationMethod}><input type="hidden" name="id" value={method.id} /><button className="icon-danger" type="submit" aria-label={`Delete ${method.label}`}><Trash2 size={15} /></button></form>
+              </div>
+            </article>)}</div>}
         </section>
       </div>
     </main>

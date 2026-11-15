@@ -40,3 +40,49 @@ export async function saveDonationMethod(formData: FormData) {
   revalidatePath("/admin/donations");
   redirect("/admin/donations?saved=1");
 }
+
+
+export async function updateDonationMethodPublication(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  const isPublished = formData.get("is_published") === "on";
+  if (!/^[0-9a-f-]{36}$/i.test(id)) redirect("/admin/donations?error=validation");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) redirect("/admin/login?setup=required");
+  const { data: claims } = await supabase.auth.getClaims();
+  if (!claims?.claims?.sub) redirect("/admin/login");
+  const { data: admin } = await supabase.from("admin_users").select("role").eq("user_id", claims.claims.sub).maybeSingle();
+  if (!admin) redirect("/admin/login?access=denied");
+
+  if (isPublished) {
+    const { data: method } = await supabase.from("donation_methods")
+      .select("verified_by,verified_at").eq("id", id).maybeSingle();
+    if (!method?.verified_by?.trim() || !method.verified_at) {
+      redirect("/admin/donations?error=verification");
+    }
+  }
+
+  const { error } = await supabase.from("donation_methods").update({ is_published: isPublished }).eq("id", id);
+  if (error) redirect("/admin/donations?error=save");
+  revalidatePath("/donations");
+  revalidatePath("/admin");
+  revalidatePath("/admin/donations");
+  redirect("/admin/donations?saved=1");
+}
+
+export async function deleteDonationMethod(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  if (!/^[0-9a-f-]{36}$/i.test(id)) redirect("/admin/donations?error=validation");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) redirect("/admin/login?setup=required");
+  const { data: claims } = await supabase.auth.getClaims();
+  if (!claims?.claims?.sub) redirect("/admin/login");
+  const { data: admin } = await supabase.from("admin_users").select("role").eq("user_id", claims.claims.sub).maybeSingle();
+  if (!admin) redirect("/admin/login?access=denied");
+
+  const { error } = await supabase.from("donation_methods").delete().eq("id", id);
+  if (error) redirect("/admin/donations?error=delete");
+  revalidatePath("/donations");
+  revalidatePath("/admin");
+  revalidatePath("/admin/donations");
+  redirect("/admin/donations?deleted=1");
+}

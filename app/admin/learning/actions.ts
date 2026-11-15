@@ -53,3 +53,53 @@ export async function saveLearningResource(formData: FormData) {
   revalidatePath("/admin/learning");
   redirect("/admin/learning?saved=1");
 }
+
+
+export async function updateLearningResourcePublication(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  const isPublished = formData.get("is_published") === "on";
+  if (!/^[0-9a-f-]{36}$/i.test(id)) redirect("/admin/learning?error=validation");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) redirect("/admin/login?setup=required");
+  const { data: claims } = await supabase.auth.getClaims();
+  if (!claims?.claims?.sub) redirect("/admin/login");
+  const { data: admin } = await supabase.from("admin_users").select("role").eq("user_id", claims.claims.sub).maybeSingle();
+  if (!admin) redirect("/admin/login?access=denied");
+
+  if (isPublished) {
+    const { data: resource } = await supabase.from("learning_resources")
+      .select("resource_type,source_reference,reviewed_by").eq("id", id).maybeSingle();
+    if (!resource || !resource.reviewed_by?.trim() ||
+        (["quran", "hadith"].includes(resource.resource_type) && !resource.source_reference?.trim())) {
+      redirect("/admin/learning?error=review");
+    }
+  }
+
+  const { error } = await supabase.from("learning_resources").update({
+    is_published: isPublished,
+    updated_at: new Date().toISOString(),
+  }).eq("id", id);
+  if (error) redirect("/admin/learning?error=save");
+  revalidatePath("/learning");
+  revalidatePath("/admin");
+  revalidatePath("/admin/learning");
+  redirect("/admin/learning?saved=1");
+}
+
+export async function deleteLearningResource(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  if (!/^[0-9a-f-]{36}$/i.test(id)) redirect("/admin/learning?error=validation");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) redirect("/admin/login?setup=required");
+  const { data: claims } = await supabase.auth.getClaims();
+  if (!claims?.claims?.sub) redirect("/admin/login");
+  const { data: admin } = await supabase.from("admin_users").select("role").eq("user_id", claims.claims.sub).maybeSingle();
+  if (!admin) redirect("/admin/login?access=denied");
+
+  const { error } = await supabase.from("learning_resources").delete().eq("id", id);
+  if (error) redirect("/admin/learning?error=delete");
+  revalidatePath("/learning");
+  revalidatePath("/admin");
+  revalidatePath("/admin/learning");
+  redirect("/admin/learning?deleted=1");
+}

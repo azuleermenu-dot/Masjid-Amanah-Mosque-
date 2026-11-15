@@ -421,3 +421,15 @@ button { font: inherit; }
 .update-placeholder h3 a { color:inherit; transition:color .2s ease; }
 .update-placeholder h3 a:hover { color:var(--gold); }
 .update-placeholder time { color:var(--muted); font-size:10px; }
+
+
+/* Compact admin publication controls */
+.inline-status-form { display:flex; align-items:center; gap:8px; }
+.inline-checkbox { display:inline-flex; align-items:center; gap:5px; color:var(--muted); font-size:10px; white-space:nowrap; }
+.inline-checkbox input { accent-color:var(--green); }
+.small-admin-button { min-height:30px; padding:0 9px; border:1px solid var(--line); background:#fff; color:var(--green); font-size:10px; cursor:pointer; }
+.small-admin-button:hover { border-color:var(--gold); }
+@media(max-width:520px) {
+  .admin-row-actions { align-items:flex-start; flex-direction:column; }
+  .inline-status-form { flex-wrap:wrap; }
+}
