@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft, BookOpen, ShieldCheck, Trash2 } from "lucide-react";
+import { ArrowLeft, BookOpen, Pencil, ShieldCheck, Trash2 } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAdmin } from "@/app/admin/actions";
+import Link from "next/link";
 import { saveLearningResource, updateLearningResourcePublication, deleteLearningResource } from "./actions";
 
 export const metadata: Metadata = { title: "Manage Learning Resources", robots: { index: false, follow: false } };
-type Props = { searchParams: Promise<{ saved?: string; deleted?: string; error?: string }> };
+type Props = { searchParams: Promise<{ saved?: string; updated?: string; deleted?: string; error?: string }> };
 
 export default async function ManageLearningPage({ searchParams }: Props) {
   const params = await searchParams;
@@ -36,7 +37,8 @@ export default async function ManageLearningPage({ searchParams }: Props) {
       <div className="admin-dashboard-wrap">
         <Link href="/admin" className="admin-back"><ArrowLeft size={14} /> Dashboard</Link>
         <div className="admin-title-row"><div><span className="eyebrow">Reviewed learning content</span><h1 className="display">Islamic learning</h1><p>Publish educational material only with reliable references and appropriate review.</p></div><span className="status-pill"><ShieldCheck size={14} /> Authorized administrator</span></div>
-        {params.saved === "1" && <p className="success-message" role="status">Learning resource saved or updated.</p>}
+        {params.saved === "1" && <p className="success-message" role="status">Learning resource saved.</p>}
+        {params.updated === "1" && <p className="success-message" role="status">Learning resource updated.</p>}
         {params.deleted === "1" && <p className="success-message" role="status">Learning resource deleted.</p>}
         {params.error && <p className="form-error" role="alert">{messages[params.error] ?? "The request could not be completed."}</p>}
 
@@ -59,6 +61,9 @@ export default async function ManageLearningPage({ searchParams }: Props) {
           {error ? <p className="form-error">Unable to load resources.</p> : !resources?.length ? <p className="admin-empty">No learning resources have been saved.</p> : <div className="admin-list">{resources.map((item) => <article className="admin-list-row" key={item.id}>
               <div><strong>{item.title}</strong><span>{item.resource_type} · {item.source_reference || "No source reference"}{item.reviewed_by ? ` · Reviewed by ${item.reviewed_by}` : ""}</span></div>
               <div className="admin-row-actions">
+                <Link href={`/admin/learning/${item.id}`} className="small-admin-button edit-admin-link" aria-label={`Edit ${item.title}`}>
+                  <Pencil size={13} /> Edit
+                </Link>
                 <form action={updateLearningResourcePublication} className="inline-status-form">
                   <input type="hidden" name="id" value={item.id} />
                   <label className="inline-checkbox"><input type="checkbox" name="is_published" defaultChecked={item.is_published} /> Publish</label>
