@@ -21,8 +21,8 @@ export async function savePrayerTime(formData: FormData) {
   const isPublished = formData.get("is_published") === "on";
   const validNames = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Jummah"];
 
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(prayerDate) || Number.isNaN(Date.parse(`${prayerDate}T00:00:00Z`)) ||
-      !validNames.includes(prayerName) || !/^([01]\\d|2[0-3]):[0-5]\\d$/.test(prayerTime) || note.length > 200) {
+  if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(prayerDate) || Number.isNaN(Date.parse(`${prayerDate}T00:00:00Z`)) ||
+      !validNames.includes(prayerName) || !/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(prayerTime) || note.length > 200) {
     redirect("/admin/prayer-times?error=validation");
   }
 
