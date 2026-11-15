@@ -62,3 +62,4 @@ This project deliberately does not invent the mosque's history, leaders, address
 - Announcement creation and publishing UI.
 - Initial Supabase schema with RLS policies, gallery storage policies, and verified-donation publication safeguards.
 - Public information remains marked as pending until confirmed.
+- Approval-gated sitemap includes published announcement detail pages when the production domain and content approval switch are configured.

@@ -1,4 +1,7 @@
 import type { MetadataRoute } from "next";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+export const revalidate = 3600;
 
 const publicPages = [
   "",
@@ -12,17 +15,46 @@ const publicPages = [
   "/contact",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-  const approved = process.env.PUBLIC_CONTENT_APPROVED === "true";
+function getApprovedSiteBase() {
+  if (process.env.PUBLIC_CONTENT_APPROVED !== "true") return null;
 
-  // Do not advertise an unverified or placeholder production URL to search engines.
-  if (!siteUrl || !approved) return [];
+  try {
+    const url = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "");
+    if (url.protocol !== "https:") return null;
+    return url.origin;
+  } catch {
+    return null;
+  }
+}
 
-  const base = siteUrl.replace(/\/$/, "");
-  return publicPages.map((path) => ({
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const base = getApprovedSiteBase();
+
+  // Do not advertise an unverified domain or unapproved pages to search engines.
+  if (!base) return [];
+
+  const staticEntries: MetadataRoute.Sitemap = publicPages.map((path) => ({
     url: `${base}${path}`,
     changeFrequency: path === "" ? "weekly" : "monthly",
     priority: path === "" ? 1 : 0.6,
   }));
+
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return staticEntries;
+
+  const { data: announcements } = await supabase
+    .from("announcements")
+    .select("slug,published_at")
+    .eq("is_published", true)
+    .order("published_at", { ascending: false })
+    .limit(500);
+
+  const announcementEntries: MetadataRoute.Sitemap = (announcements ?? []).map((item) => ({
+    url: `${base}/news/${encodeURIComponent(item.slug)}`,
+    lastModified: item.published_at ? new Date(item.published_at) : undefined,
+    changeFrequency: "monthly",
+    priority: 0.5,
+  }));
+
+  return [...staticEntries, ...announcementEntries];
 }
