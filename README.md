@@ -33,7 +33,8 @@ The existing connected Supabase project in the developer account belongs to anot
 - Public visitors can read published announcements, events, prayer times, learning resources, verified donation methods, and published gallery entries.
 - Only user IDs explicitly listed in `public.admin_users` can manage content.
 - Admin membership changes are performed directly by a trusted project owner, not from the public app.
-- Contact inquiries can be submitted by visitors but can only be read and managed by authorized administrators.
+- Contact inquiries can be submitted after Cloudflare Turnstile is configured, and can only be read and managed by authorized administrators.
+- Turnstile tokens are validated server-side, including action and configured hostname checks.
 - Gallery uploads are restricted to authorized admins. The storage bucket is private; public visitors can receive short-lived signed image URLs only for gallery records marked as published.
 - RLS is enabled on every table created by the migration.
 - No service-role key is used by the frontend.
@@ -47,12 +48,14 @@ This project deliberately does not invent the mosque's history, leaders, address
 3. Add approved real mosque photos with permission.
 4. Configure the dedicated Supabase project and authorized administrators.
 5. Set the real Vercel production domain and update metadata/SEO configuration.
-6. Remove the temporary no-index setting in `app/robots.ts` only after public content and domain are verified.
-7. Run lint, production build, RLS checks, and mobile/tablet/desktop testing.
-8. Connect the repository to Vercel and configure environment variables before deploying.
+6. Configure Cloudflare Turnstile site key, secret, and allowed production hostnames before enabling public contact submissions.
+7. Remove the temporary no-index setting in `app/robots.ts` only after public content and domain are verified.
+8. Run lint, production build, RLS checks, and mobile/tablet/desktop testing.
+9. Connect the repository to Vercel and configure environment variables before deploying.
 
 ## Current implementation
 - Responsive homepage and shared navigation/footer.
+- Authorized mosque-profile editor for approved history, mission, vision, facilities, address, contact, and social links.
 - Dedicated pages for About, Prayer Times, Programs, Learning, News, Gallery, Donations, and Contact.
 - Restricted admin sign-in and server-verified administrator dashboard.
 - Announcement creation and publishing UI.
