@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { BookOpenCheck, BookText, GraduationCap, ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { BookOpenCheck, BookText, GraduationCap, ExternalLink, ArrowUpRight } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { PendingPanel } from "@/components/pending-panel";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -24,7 +25,8 @@ export default async function LearningPage() {
           <span className="eyebrow">{item.resource_type.replace("_", " ")}</span><h3>{item.title}</h3><p>{item.summary}</p>
           {item.source_reference && <small>Reference: {item.source_reference}</small>}
           {item.reviewed_by && <small>Reviewed by: {item.reviewed_by}</small>}
-          {item.external_url && <a href={item.external_url} target="_blank" rel="noreferrer">Open resource <ExternalLink size={13} /></a>}
+          <Link href={`/learning/${item.id}`} className="resource-read-link">Read resource <ArrowUpRight size={13} /></Link>
+          {item.external_url && <a href={item.external_url} target="_blank" rel="noopener noreferrer">Open source link <ExternalLink size={13} /></a>}
         </article>)}</div> : <p className="subtle-copy">{error ? "The learning resources could not be loaded." : "No learning resources have been approved for publication yet."}</p>}
       </div>
       {!supabase && <PendingPanel title="Reviewed resources will appear here." description="Connect the dedicated Masjid Amanah database to publish content approved by mosque management. No Qur&apos;an translation, Hadith, or religious ruling is generated automatically." />}
