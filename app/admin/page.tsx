@@ -83,10 +83,20 @@ export default async function AdminPage() {
           {stats.map(({ label, count, icon: Icon }) => <article className="admin-stat" key={label}><Icon size={19} /><span>{label}</span><strong>{count ?? "—"}</strong></article>)}
         </div>
 
-        <section className="admin-module">
-          <div><span className="eyebrow">Content publishing</span><h2>Announcements</h2><p>Create, save, and publish official mosque updates.</p></div>
-          <Link href="/admin/announcements" className="btn-primary">Manage announcements <ArrowUpRight size={14} /></Link>
-        </section>
+        <div className="admin-module-grid">
+          <section className="admin-module">
+            <div><span className="eyebrow">Content publishing</span><h2>Announcements</h2><p>Create and publish official mosque updates.</p></div>
+            <Link href="/admin/announcements" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
+          </section>
+          <section className="admin-module">
+            <div><span className="eyebrow">Daily schedule</span><h2>Prayer times</h2><p>Enter the mosque's approved daily timetable.</p></div>
+            <Link href="/admin/prayer-times" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
+          </section>
+          <section className="admin-module">
+            <div><span className="eyebrow">Community calendar</span><h2>Events</h2><p>Create confirmed community activities and gatherings.</p></div>
+            <Link href="/admin/events" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
+          </section>
+        </div>
 
         <div className="admin-security-note"><ShieldCheck size={18} /><p>Content permissions are enforced by Supabase Row Level Security. Only user IDs explicitly listed in the admin_users table can manage mosque content.</p></div>
       </div>
