@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowDown, ArrowRight, CalendarDays, Clock3, Heart, MapPin, Menu, X, BookOpen, Users, Megaphone, Mail, Instagram, Facebook, ExternalLink } from "lucide-react";
+import { ArrowDown, ArrowRight, CalendarDays, Clock3, Menu, X, BookOpen, Users, Megaphone } from "lucide-react";
 import { motion } from "framer-motion";
 
 const navItems = [
