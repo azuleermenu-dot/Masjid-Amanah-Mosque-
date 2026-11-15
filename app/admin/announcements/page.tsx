@@ -3,12 +3,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAdmin } from "@/app/admin/actions";
-import { createAnnouncement } from "./actions";
-import { ArrowLeft, Megaphone, Plus, ShieldCheck } from "lucide-react";
+import { createAnnouncement, deleteAnnouncement, updateAnnouncementStatus } from "./actions";
+import { ArrowLeft, Megaphone, Plus, ShieldCheck, Trash2 } from "lucide-react";
 
 export const metadata: Metadata = { title: "Manage Announcements", robots: { index: false, follow: false } };
 
-type Props = { searchParams: Promise<{ saved?: string; error?: string }> };
+type Props = { searchParams: Promise<{ saved?: string; deleted?: string; error?: string }> };
 
 export default async function ManageAnnouncementsPage({ searchParams }: Props) {
   const params = await searchParams;
@@ -32,6 +32,7 @@ export default async function ManageAnnouncementsPage({ searchParams }: Props) {
     slug: "The title must contain at least three letters or numbers.",
     duplicate: "An announcement with a similar title already exists. Change the title and try again.",
     save: "The announcement could not be saved. Check the database setup and try again.",
+    delete: "The announcement could not be deleted.",
   }[params.error ?? ""];
 
   return (
@@ -45,6 +46,7 @@ export default async function ManageAnnouncementsPage({ searchParams }: Props) {
         <div className="admin-title-row"><div><span className="eyebrow">Content management</span><h1 className="display">Announcements</h1><p>Create and publish mosque-approved public updates.</p></div><span className="status-pill"><ShieldCheck size={14} /> Authorized administrator</span></div>
 
         {params.saved === "1" && <p className="success-message" role="status">Announcement saved successfully.</p>}
+        {params.deleted === "1" && <p className="success-message" role="status">Announcement deleted.</p>}
         {errorText && <p className="form-error" role="alert">{errorText}</p>}
         {error && <p className="form-error" role="alert">Unable to load announcements. Confirm the database migration has been applied.</p>}
 
@@ -63,7 +65,20 @@ export default async function ManageAnnouncementsPage({ searchParams }: Props) {
         <section className="admin-list-section">
           <div className="admin-section-heading"><Megaphone size={18} /><h2>Recent announcements</h2></div>
           {!announcements?.length ? <p className="admin-empty">No announcements saved yet.</p> : <div className="admin-list">
-            {announcements.map((item) => <article className="admin-list-row" key={item.id}><div><strong>{item.title}</strong><span>/{item.slug}</span></div><span className={item.is_published ? "published-badge" : "draft-badge"}>{item.is_published ? "Published" : "Draft"}</span></article>)}
+            {announcements.map((item) => <article className="admin-list-row" key={item.id}>
+              <div><strong>{item.title}</strong><span>/{item.slug}</span></div>
+              <div className="admin-row-actions">
+                <form action={updateAnnouncementStatus} className="inline-status-form">
+                  <input type="hidden" name="id" value={item.id} />
+                  <label className="inline-checkbox"><input type="checkbox" name="is_published" defaultChecked={item.is_published} /> Publish</label>
+                  <button className="small-admin-button" type="submit">Update</button>
+                </form>
+                <form action={deleteAnnouncement}>
+                  <input type="hidden" name="id" value={item.id} />
+                  <button className="icon-danger" type="submit" aria-label={`Delete ${item.title}`}><Trash2 size={15} /></button>
+                </form>
+              </div>
+            </article>)}
           </div>}
         </section>
       </div>
