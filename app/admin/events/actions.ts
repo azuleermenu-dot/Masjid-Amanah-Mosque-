@@ -6,6 +6,9 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function toPhilippinesIso(value: string): string | null {
   if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}T([01][0-9]|2[0-3]):[0-5][0-9]$/.test(value)) return null;
+  const datePart = value.slice(0, 10);
+  const [year, month, day] = datePart.split("-").map(Number);
+  if (new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10) !== datePart) return null;
   const date = new Date(`${value}:00+08:00`);
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
