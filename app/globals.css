@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 :root {
+  --font-sans: "DM Sans";
+  --font-display: "Cormorant Garamond";
+  --font-arabic: "Noto Naskh Arabic";
   --green: #123d32;
   --green-deep: #0b2b24;
   --green-soft: #e9f0e9;

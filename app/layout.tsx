@@ -1,26 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Sans, Noto_Naskh_Arabic } from "next/font/google";
 import "./globals.css";
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const arabic = Noto_Naskh_Arabic({
-  subsets: ["arabic"],
-  variable: "--font-arabic",
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
 
 const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 const approvedForIndexing = process.env.PUBLIC_CONTENT_APPROVED === "true" && Boolean(publicSiteUrl);
@@ -52,9 +31,15 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${dmSans.variable} ${cormorant.variable} ${arabic.variable}`}>
-        {children}
-      </body>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Noto+Naskh+Arabic:wght@400;500;600;700&amp;display=swap"
+        />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
