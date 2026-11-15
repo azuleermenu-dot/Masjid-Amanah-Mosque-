@@ -88,7 +88,7 @@ export default function Home() {
         <section className="section updates-section">
           <div className="container updates-layout">
             <div><span className="eyebrow">Stay informed · ابق على اطلاع</span><h2 className="display">News and community updates.</h2><p>Official announcements and upcoming activities will be shared here when details are confirmed.</p><Link href="/news" className="text-link">Visit announcements <ArrowUpRight size={15} /></Link></div>
-            <div className="update-placeholder"><Megaphone size={23} /><span className="eyebrow">Official announcements</span><h3>No announcements published yet.</h3><p>Check back for updates approved by mosque management.</p></div>
+            <div className="update-placeholder"><Megaphone size={23} /><span className="eyebrow">Official announcements</span><h3>Updates from Masjid Amanah.</h3><p>Browse the announcements page for the latest information published by mosque management.</p><Link href="/news" className="text-link">Read announcements <ArrowUpRight size={15} /></Link></div>
           </div>
         </section>
 
