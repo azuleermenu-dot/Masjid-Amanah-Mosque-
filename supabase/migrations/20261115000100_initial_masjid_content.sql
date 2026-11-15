@@ -98,7 +98,7 @@ create table if not exists public.gallery_items (
 create table if not exists public.contact_inquiries (
   id uuid primary key default gen_random_uuid(),
   full_name text not null check (char_length(trim(full_name)) between 2 and 100),
-  email text not null check (char_length(email) <= 254 and email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$'),
+  email text not null check (char_length(email) <= 254 and email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+[.][A-Z]{2,}$'),
   message text not null check (char_length(trim(message)) between 10 and 4000),
   status text not null default 'new' check (status in ('new', 'in_progress', 'resolved', 'spam')),
   created_at timestamptz not null default now()
