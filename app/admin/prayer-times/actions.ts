@@ -47,3 +47,43 @@ export async function savePrayerTime(formData: FormData) {
   revalidatePath("/admin/prayer-times");
   redirect("/admin/prayer-times?saved=1");
 }
+
+
+export async function deletePrayerTime(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  if (!/^[0-9a-f-]{36}$/i.test(id)) redirect("/admin/prayer-times?error=validation");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) redirect("/admin/login?setup=required");
+  const { data: claims } = await supabase.auth.getClaims();
+  if (!claims?.claims?.sub) redirect("/admin/login");
+  const { data: admin } = await supabase.from("admin_users").select("role").eq("user_id", claims.claims.sub).maybeSingle();
+  if (!admin) redirect("/admin/login?access=denied");
+  const { error } = await supabase.from("prayer_times").delete().eq("id", id);
+  if (error) redirect("/admin/prayer-times?error=delete");
+  revalidatePath("/prayer-times");
+  revalidatePath("/admin");
+  revalidatePath("/admin/prayer-times");
+  redirect("/admin/prayer-times?deleted=1");
+}
+
+export async function updatePrayerTimePublication(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  const isPublished = formData.get("is_published") === "on";
+  if (!/^[0-9a-f-]{36}$/i.test(id)) redirect("/admin/prayer-times?error=validation");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) redirect("/admin/login?setup=required");
+  const { data: claims } = await supabase.auth.getClaims();
+  if (!claims?.claims?.sub) redirect("/admin/login");
+  const { data: admin } = await supabase.from("admin_users").select("role").eq("user_id", claims.claims.sub).maybeSingle();
+  if (!admin) redirect("/admin/login?access=denied");
+  const { error } = await supabase.from("prayer_times").update({
+    is_published: isPublished,
+    updated_by: claims.claims.sub,
+    updated_at: new Date().toISOString(),
+  }).eq("id", id);
+  if (error) redirect("/admin/prayer-times?error=save");
+  revalidatePath("/prayer-times");
+  revalidatePath("/admin");
+  revalidatePath("/admin/prayer-times");
+  redirect("/admin/prayer-times?saved=1");
+}

@@ -63,3 +63,22 @@ export async function deleteEvent(formData: FormData) {
   revalidatePath("/admin/events");
   redirect("/admin/events?deleted=1");
 }
+
+
+export async function updateEventPublication(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  const isPublished = formData.get("is_published") === "on";
+  if (!/^[0-9a-f-]{36}$/i.test(id)) redirect("/admin/events?error=validation");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) redirect("/admin/login?setup=required");
+  const { data: claims } = await supabase.auth.getClaims();
+  if (!claims?.claims?.sub) redirect("/admin/login");
+  const { data: admin } = await supabase.from("admin_users").select("role").eq("user_id", claims.claims.sub).maybeSingle();
+  if (!admin) redirect("/admin/login?access=denied");
+  const { error } = await supabase.from("events").update({ is_published: isPublished }).eq("id", id);
+  if (error) redirect("/admin/events?error=save");
+  revalidatePath("/programs");
+  revalidatePath("/admin");
+  revalidatePath("/admin/events");
+  redirect("/admin/events?saved=1");
+}

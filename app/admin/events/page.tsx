@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { ArrowLeft, CalendarDays, ShieldCheck, Trash2 } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAdmin } from "@/app/admin/actions";
-import { createEvent, deleteEvent } from "./actions";
+import { createEvent, deleteEvent, updateEventPublication } from "./actions";
 
 export const metadata: Metadata = { title: "Manage Events", robots: { index: false, follow: false } };
 type Props = { searchParams: Promise<{ saved?: string; deleted?: string; error?: string }> };
@@ -54,7 +54,14 @@ export default async function ManageEventsPage({ searchParams }: Props) {
           {error ? <p className="form-error">Unable to load events. Check the Supabase migration.</p> : !events?.length ? <p className="admin-empty">No events have been saved.</p> : <div className="admin-list">
             {events.map((event) => <article className="admin-list-row" key={event.id}>
               <div><strong>{event.title}</strong><span>{new Intl.DateTimeFormat("en-PH", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Manila" }).format(new Date(event.starts_at))}{event.venue ? ` · ${event.venue}` : ""}</span></div>
-              <div className="admin-row-actions"><span className={event.is_published ? "published-badge" : "draft-badge"}>{event.is_published ? "Published" : "Draft"}</span><form action={deleteEvent}><input type="hidden" name="id" value={event.id} /><button className="icon-danger" type="submit" aria-label={`Delete ${event.title}`}><Trash2 size={15} /></button></form></div>
+              <div className="admin-row-actions">
+                <form action={updateEventPublication} className="inline-status-form">
+                  <input type="hidden" name="id" value={event.id} />
+                  <label className="inline-checkbox"><input type="checkbox" name="is_published" defaultChecked={event.is_published} /> Publish</label>
+                  <button className="small-admin-button" type="submit">Update</button>
+                </form>
+                <form action={deleteEvent}><input type="hidden" name="id" value={event.id} /><button className="icon-danger" type="submit" aria-label="Delete event"><Trash2 size={15} /></button></form>
+              </div>
             </article>)}
           </div>}
         </section>
