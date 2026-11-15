@@ -417,3 +417,7 @@ button { font: inherit; }
   .announcement-detail { padding:19px; }
   .announcement-detail-body { padding:22px 0 30px; font-size:13px; }
 }
+
+.update-placeholder h3 a { color:inherit; transition:color .2s ease; }
+.update-placeholder h3 a:hover { color:var(--gold); }
+.update-placeholder time { color:var(--muted); font-size:10px; }

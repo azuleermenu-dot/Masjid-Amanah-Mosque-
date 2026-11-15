@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, BookOpen, Clock3, HeartHandshake, MapPin, Megaphone, Users } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 const reveal = {
   hidden: { opacity: 0, y: 22 },
@@ -17,7 +19,65 @@ const pathways = [
   { icon: Users, title: "Programs", copy: "Discover classes, activities, and community gatherings.", href: "/programs", label: "See programs" },
 ];
 
+type MosqueHomeProfile = {
+  introduction: string | null;
+  address: string | null;
+  map_url: string | null;
+};
+
+type LatestAnnouncement = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  published_at: string | null;
+};
+
 export default function Home() {
+  const [profile, setProfile] = useState<MosqueHomeProfile | null>(null);
+  const [latestAnnouncement, setLatestAnnouncement] = useState<LatestAnnouncement | null>(null);
+
+  useEffect(() => {
+    const supabase = createSupabaseBrowserClient();
+    if (!supabase) return;
+
+    let isMounted = true;
+
+    async function loadHomepageContent() {
+      try {
+        const [profileResult, announcementResult] = await Promise.all([
+          supabase
+            .from("mosque_profile")
+            .select("introduction,address,map_url")
+            .eq("id", true)
+            .maybeSingle(),
+          supabase
+            .from("announcements")
+            .select("title,slug,excerpt,body,published_at")
+            .eq("is_published", true)
+            .order("published_at", { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+        ]);
+
+        if (!isMounted) return;
+        if (!profileResult.error && profileResult.data) {
+          setProfile(profileResult.data as MosqueHomeProfile);
+        }
+        if (!announcementResult.error && announcementResult.data) {
+          setLatestAnnouncement(announcementResult.data as LatestAnnouncement);
+        }
+      } catch {
+        // Keep the editorial fallback content visible if the public database is unavailable.
+      }
+    }
+
+    void loadHomepageContent();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <>
       <div className="topline"><div className="container topline-inner"><span>MASJID AMANAH <i>·</i> <span className="arabic" lang="ar">مسجد الأمانة</span></span><span>Official mosque website</span></div></div>
@@ -88,7 +148,17 @@ export default function Home() {
         <section className="section updates-section">
           <div className="container updates-layout">
             <div><span className="eyebrow">Stay informed · ابق على اطلاع</span><h2 className="display">News and community updates.</h2><p>Official announcements and upcoming activities will be shared here when details are confirmed.</p><Link href="/news" className="text-link">Visit announcements <ArrowUpRight size={15} /></Link></div>
-            <div className="update-placeholder"><Megaphone size={23} /><span className="eyebrow">Official announcements</span><h3>Updates from Masjid Amanah.</h3><p>Browse the announcements page for the latest information published by mosque management.</p><Link href="/news" className="text-link">Read announcements <ArrowUpRight size={15} /></Link></div>
+            <div className="update-placeholder"><Megaphone size={23} /><span className="eyebrow">Official announcements</span>
+              {latestAnnouncement ? <>
+                <h3><Link href={`/news/${latestAnnouncement.slug}`}>{latestAnnouncement.title}</Link></h3>
+                <p>{latestAnnouncement.excerpt || latestAnnouncement.body.slice(0, 180)}</p>
+                {latestAnnouncement.published_at ? <time dateTime={latestAnnouncement.published_at}>{new Intl.DateTimeFormat("en-PH", { dateStyle: "long", timeZone: "Asia/Manila" }).format(new Date(latestAnnouncement.published_at))}</time> : null}
+              </> : <>
+                <h3>Updates from Masjid Amanah.</h3>
+                <p>Browse the announcements page for the latest information published by mosque management.</p>
+              </>}
+              <Link href="/news" className="text-link">Read announcements <ArrowUpRight size={15} /></Link>
+            </div>
           </div>
         </section>
 
@@ -105,8 +175,8 @@ export default function Home() {
         <section className="location-strip">
           <div className="container location-inner">
             <span className="location-icon"><MapPin size={20} /></span>
-            <div><strong>Find Masjid Amanah</strong><p>The official address and map location will be added after verification.</p></div>
-            <Link href="/contact" className="text-link">Contact information <ArrowUpRight size={15} /></Link>
+            <div><strong>Find Masjid Amanah</strong><p>{profile?.address?.trim() || "The official address and map location will be added after verification."}</p></div>
+            {profile?.map_url?.trim() ? <a href={profile.map_url} className="text-link" target="_blank" rel="noopener noreferrer">Open map <ArrowUpRight size={15} /></a> : <Link href="/contact" className="text-link">Contact information <ArrowUpRight size={15} /></Link>}
           </div>
         </section>
       </main>

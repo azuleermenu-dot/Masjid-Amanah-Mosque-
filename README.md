@@ -54,7 +54,7 @@ This project deliberately does not invent the mosque's history, leaders, address
 9. Connect the repository to Vercel and configure environment variables before deploying.
 
 ## Current implementation
-- Responsive homepage and shared navigation/footer.
+- Responsive homepage and shared navigation/footer, including live approved mosque introduction, location, and latest announcement when the public database is configured.
 - Prayer countdown checks both today and tomorrow when verified entries are available, without generating missing prayer times.
 - Authorized mosque-profile editor for approved history, mission, vision, facilities, address, contact, and social links.
 - Dedicated pages for About, Prayer Times, Programs, Learning, News (including individual announcement pages), Gallery, Donations, and Contact.
