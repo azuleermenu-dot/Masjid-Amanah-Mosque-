@@ -33,6 +33,7 @@ export async function updateMosqueProfile(formData: FormData) {
     history: String(formData.get("history") ?? "").trim(),
     mission: String(formData.get("mission") ?? "").trim(),
     vision: String(formData.get("vision") ?? "").trim(),
+    leadership_information: String(formData.get("leadership_information") ?? "").trim(),
     community_information: String(formData.get("community_information") ?? "").trim(),
     address: String(formData.get("address") ?? "").trim(),
     phone: String(formData.get("phone") ?? "").trim(),
@@ -50,7 +51,7 @@ export async function updateMosqueProfile(formData: FormData) {
     .filter(Boolean);
 
   const limits: Record<string, number> = {
-    introduction: 5000, history: 5000, mission: 3000, vision: 3000,
+    introduction: 5000, history: 5000, mission: 3000, vision: 3000, leadership_information: 3000,
     community_information: 5000, address: 500, phone: 80, email: 254,
     website_url: 2000, map_url: 2000, facebook_url: 2000, instagram_url: 2000, youtube_url: 2000,
   };
