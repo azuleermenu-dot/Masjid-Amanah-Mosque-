@@ -108,9 +108,11 @@ export async function saveDailyPrayerSchedule(formData: FormData) {
   const isPublished = formData.get("is_published") === "on";
   const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Jummah"];
   const [year, month, day] = prayerDate.split("-").map(Number);
+  const utcDate = Date.UTC(year, month - 1, day);
   const validCalendarDate =
     prayerDate.length === 10 &&
-    new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10) === prayerDate;
+    !Number.isNaN(utcDate) &&
+    new Date(utcDate).toISOString().slice(0, 10) === prayerDate;
 
   if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(prayerDate) || !validCalendarDate || note.length > 200) {
     redirect("/admin/prayer-times?error=validation");
