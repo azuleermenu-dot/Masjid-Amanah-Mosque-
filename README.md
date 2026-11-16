@@ -72,4 +72,5 @@ This project deliberately does not invent the mosque's history, leaders, address
 - Initial Supabase schema with RLS policies, gallery storage policies, and verified-donation publication safeguards.
 - Public information remains marked as pending until confirmed.
 - GitHub Actions checks TypeScript, the production build, and dependency audit reporting on repository changes.
-- Approval-gated sitemap includes published announcement detail pages when the production domain and content approval switch are configured.
+- Approval-gated sitemap includes published announcement and learning-resource detail pages when the production HTTPS domain and content approval switch are configured.
+- Global response headers disable MIME sniffing, block framing, limit referrer leakage, and disable unused device permissions.
