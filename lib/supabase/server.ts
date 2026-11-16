@@ -20,7 +20,7 @@ export async function createSupabaseServerClient() {
             cookieStore.set(name, value, options);
           });
         } catch {
-          // Server Components cannot write cookies. middleware.ts refreshes sessions.
+          // Server Components cannot write cookies. proxy.ts refreshes sessions before protected admin routes run.
         }
       },
     },
