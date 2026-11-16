@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | Masjid Amanah",
   },
   description:
-    "The official digital home of Masjid Amanah. Find mosque updates, prayer information, community programs, and ways to get in touch.",
+    "An unofficial, independently developed website sharing information about Masjid Amanah, including mosque updates, prayer information, community programs, and ways to get in touch.",
   applicationName: "Masjid Amanah",
   metadataBase: publicSiteUrl,
   openGraph: {
