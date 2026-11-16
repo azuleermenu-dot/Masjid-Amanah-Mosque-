@@ -13,6 +13,7 @@ const publicPages = [
   "/gallery",
   "/donations",
   "/contact",
+  "/privacy",
 ];
 
 function getApprovedSiteBase() {
