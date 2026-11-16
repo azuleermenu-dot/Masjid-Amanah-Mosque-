@@ -58,7 +58,7 @@ This project deliberately does not invent the mosque's history, leaders, address
 - Responsive homepage and shared navigation/footer, including live approved mosque introduction, location, and latest announcement when the public database is configured.
 - Prayer countdown checks both today and tomorrow when verified entries are available, without generating missing prayer times.
 - Authorized mosque-profile editor for approved history, mission, vision, facilities, address, contact, and social links.
-- Dedicated pages for About, Prayer Times, Programs, Learning (including full resource reading pages), News (including individual announcement pages), Gallery, Donations, and Contact.
+- Dedicated pages for About, Prayer Times, Programs, Learning (including full resource reading pages), News (including individual announcement pages), Gallery, Donations, Contact, and a draft Privacy Notice.
 - Restricted admin sign-in and server-verified administrator dashboard.
 - Full announcement create, edit, publish/unpublish, and delete workflow.
 - Event create, edit, publish/unpublish, and delete workflow, with an iCalendar download for upcoming public events.
@@ -67,6 +67,7 @@ This project deliberately does not invent the mosque's history, leaders, address
 - Donation method create, edit, verify, publish/unpublish, and delete workflow; edited payment details require fresh confirmation.
 - Mosque gallery uploads and deletion with private storage and short-lived signed public image URLs.
 - Private contact inquiry inbox with status management and a Turnstile-protected submission form.
+- Draft privacy notice covering form data, processing purpose, access controls, service providers, retention, and privacy requests; management approval is required before launch.
 - Branded loading, error, and not-found states; installable web app manifest and icon.
 - Initial Supabase schema with RLS policies, gallery storage policies, and verified-donation publication safeguards.
 - Public information remains marked as pending until confirmed.
