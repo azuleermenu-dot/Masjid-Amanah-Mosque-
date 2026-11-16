@@ -30,6 +30,7 @@ export function SiteFooter() {
             <Link href="/gallery">Gallery</Link>
             <Link href="/donations">Donation information</Link>
             <Link href="/contact">Contact & location</Link>
+            <Link href="/privacy">Privacy notice</Link>
           </div>
         </div>
         <div className="footer-contact">
