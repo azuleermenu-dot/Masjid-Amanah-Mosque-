@@ -521,3 +521,50 @@ button { font: inherit; }
 .privacy-section p { max-width:700px; margin:0; color:var(--muted); font-size:12px; line-height:1.9; }
 .contact-form .form-hint a { color:var(--green); text-decoration:underline; }
 @media(max-width:520px) { .privacy-intro { padding:20px; } .privacy-section { grid-template-columns:40px 1fr; gap:13px; } }
+
+
+/* Madrasah education */
+.education-intro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:82px; }
+.education-intro-card { min-height:240px; display:flex; flex-direction:column; align-items:flex-start; }
+.education-intro-card > svg,.education-empty-state > svg { color:var(--gold); }
+.education-intro-card .eyebrow { margin-top:22px; }
+.education-intro-card h2 { margin:9px 0; color:var(--green); font:500 27px var(--font-display),Georgia,serif; }
+.education-intro-card p { margin:0; color:var(--muted); font-size:12px; line-height:1.85; }
+.education-section { margin:0 0 76px; }
+.education-section-heading { max-width:650px; margin-bottom:28px; }
+.education-section-heading h2 { margin:12px 0 8px; font-size:clamp(36px,5vw,52px); }
+.education-section-heading p { color:var(--muted); font-size:13px; line-height:1.8; }
+.education-empty-state { padding:34px; border:1px solid var(--line); background:var(--paper); }
+.education-empty-state h3 { margin:16px 0 7px; color:var(--green); font:500 26px var(--font-display),Georgia,serif; }
+.education-empty-state p { max-width:650px; margin:0; color:var(--muted); font-size:12px; line-height:1.85; }
+.graduate-list { border-top:1px solid var(--line); }
+.graduate-row { display:grid; grid-template-columns:100px 1fr auto; gap:22px; align-items:center; padding:20px 8px; border-bottom:1px solid var(--line); }
+.graduate-year { color:var(--gold); font:500 28px var(--font-display),Georgia,serif; }
+.graduate-details h3 { margin:0 0 4px; color:var(--green); font:500 24px var(--font-display),Georgia,serif; }
+.graduate-details p { margin:0; color:var(--muted); font-size:11px; }
+.graduate-distinction { color:var(--green); font-size:10px; font-weight:700; }
+.madrasah-admin-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin:34px 0; }
+.madrasah-admin-panel { min-width:0; padding:26px; border:1px solid var(--line); background:var(--paper); }
+.madrasah-admin-panel h2 { margin:9px 0 22px; color:var(--green); font:500 30px var(--font-display),Georgia,serif; }
+.madrasah-admin-form { display:grid; gap:14px; }
+.madrasah-admin-form label:not(.madrasah-check) { display:grid; gap:7px; color:var(--ink); font-size:11px; font-weight:700; }
+.madrasah-admin-form input:not([type="checkbox"]),.madrasah-admin-form textarea { width:100%; min-height:44px; padding:11px 12px; border:1px solid var(--line); border-radius:0; background:#fff; color:var(--ink); font:400 12px var(--font-sans),sans-serif; }
+.madrasah-admin-form textarea { resize:vertical; }
+.madrasah-check { display:flex; align-items:flex-start; gap:9px; color:var(--muted); font-size:11px; line-height:1.6; }
+.madrasah-check input { flex:none; margin-top:2px; accent-color:var(--green); }
+.madrasah-admin-form .btn-primary { justify-self:start; cursor:pointer; }
+.madrasah-privacy-note { margin:0; padding:12px; background:var(--green-soft); color:var(--green); font-size:10px; line-height:1.7; }
+.madrasah-record-list { margin-top:24px; border-top:1px solid var(--line); }
+.madrasah-record { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:13px 0; border-bottom:1px solid var(--line); }
+.madrasah-record > div { min-width:0; display:grid; gap:4px; }
+.madrasah-record strong { color:var(--green); font-size:12px; overflow-wrap:anywhere; }
+.madrasah-record small { color:var(--muted); font-size:10px; }
+.madrasah-delete { display:grid; place-items:center; width:36px; height:36px; border:1px solid var(--line); background:transparent; color:#8a4c43; cursor:pointer; }
+@media (max-width:760px) {
+  .education-intro-grid,.madrasah-admin-grid { grid-template-columns:1fr; }
+  .education-intro-grid { margin-bottom:58px; }
+  .graduate-row { grid-template-columns:66px 1fr; gap:12px; }
+  .graduate-year { font-size:23px; }
+  .graduate-distinction { grid-column:2; }
+  .madrasah-admin-panel { padding:20px; }
+}

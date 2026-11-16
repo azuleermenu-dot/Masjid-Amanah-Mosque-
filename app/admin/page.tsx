@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowUpRight, CalendarDays, Images, Megaphone, MoonStar, ShieldCheck, BookOpen, Mail, LockKeyhole } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Images, Megaphone, MoonStar, ShieldCheck, BookOpen, Mail, LockKeyhole, GraduationCap } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAdmin } from "./actions";
 
@@ -103,6 +103,10 @@ export default async function AdminPage() {
           <section className="admin-module">
             <div><span className="eyebrow">Verified content</span><h2>Islamic learning</h2><p>Manage resources with references and reviewer details.</p></div>
             <Link href="/admin/learning" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
+          </section>
+          <section className="admin-module">
+            <div><span className="eyebrow">Madrasah education</span><h2>Education & graduates</h2><p>Manage approved learning programs and the consent-based public graduate directory.</p></div>
+            <Link href="/admin/madrasah" className="btn-primary">Manage <ArrowUpRight size={14} /></Link>
           </section>
           <section className="admin-module">
             <div><span className="eyebrow">Transparent giving</span><h2>Donations</h2><p>Publish only payment details verified by mosque management.</p></div>

@@ -10,6 +10,7 @@ const links = [
   { label: "Prayer times", href: "/prayer-times" },
   { label: "Programs", href: "/programs" },
   { label: "Learning", href: "/learning" },
+  { label: "Madrasah", href: "/education" },
   { label: "News", href: "/news" },
   { label: "Gallery", href: "/gallery" },
 ];
