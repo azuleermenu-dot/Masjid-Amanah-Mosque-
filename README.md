@@ -1,6 +1,6 @@
-# Masjid Amanah — Official Website
+# Masjid Amanah — Unofficial Website
 
-A responsive official website foundation for Masjid Amanah (مسجد الأمانة).
+A responsive, independently developed unofficial website for sharing information about Masjid Amanah (مسجد الأمانة).
 
 ## Technology
 - Next.js 16.4.6 / React 19.3.1 / TypeScript
