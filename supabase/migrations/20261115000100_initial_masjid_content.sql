@@ -233,15 +233,11 @@ create policy "Admins manage gallery items"
   using (exists (select 1 from public.admin_users a where a.user_id = (select auth.uid())))
   with check (exists (select 1 from public.admin_users a where a.user_id = (select auth.uid())));
 
-grant insert on public.contact_inquiries to anon, authenticated;
+-- Visitors cannot insert directly. Contact submissions use the server-only
+-- Supabase secret key only after server-side Turnstile verification.
 grant select, update on public.contact_inquiries to authenticated;
+grant insert on public.contact_inquiries to service_role;
 drop policy if exists "Visitors can submit contact inquiries" on public.contact_inquiries;
-create policy "Visitors can submit contact inquiries"
-  on public.contact_inquiries for insert to anon, authenticated
-  with check (
-    char_length(trim(full_name)) between 2 and 100
-    and char_length(message) between 10 and 4000
-  );
 drop policy if exists "Admins can review contact inquiries" on public.contact_inquiries;
 create policy "Admins can review contact inquiries"
   on public.contact_inquiries for all to authenticated
