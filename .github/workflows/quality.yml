@@ -53,5 +53,7 @@ jobs:
           NODE
       - name: Type check
         run: npx tsc --noEmit
+      - name: Lint
+        run: npm run lint
       - name: Production build
         run: npm run build
