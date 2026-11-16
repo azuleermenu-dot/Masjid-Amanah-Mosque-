@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, BookOpen, Clock3, HeartHandshake, MapPin, Megaphone, Users } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -38,6 +38,8 @@ export default function HomePage({
   profile: MosqueHomeProfile | null;
   latestAnnouncement: LatestAnnouncement | null;
 }) {
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
   return (
     <>
       <div className="topline"><div className="container topline-inner"><span>MASJID AMANAH <i>·</i> <span className="arabic" lang="ar">مسجد الأمانة</span></span><span>Official mosque website</span></div></div>
@@ -48,7 +50,7 @@ export default function HomePage({
           <div className="hero-orbit orbit-one" aria-hidden="true" />
           <div className="hero-orbit orbit-two" aria-hidden="true" />
           <div className="container hero-layout">
-            <motion.div initial="hidden" animate="visible" variants={reveal} className="hero-copy">
+            <motion.div initial={shouldReduceMotion ? false : "hidden"} animate="visible" variants={reveal} className="hero-copy">
               <span className="eyebrow">Welcome · أهلاً وسهلاً</span>
               <h1 className="display">A place to pause, <em>pray</em>, and belong.</h1>
               <p>Welcome to Masjid Amanah — a place of worship, knowledge, unity, and community.</p>
@@ -58,7 +60,7 @@ export default function HomePage({
               </div>
               <div className="hero-caption"><span /> A COMMUNITY, ROOTED IN FAITH</div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, scale: .96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .9 }} className="hero-art" aria-label="Decorative Islamic geometric artwork">
+            <motion.div initial={shouldReduceMotion ? false : { opacity: 0, scale: .96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: shouldReduceMotion ? 0 : .9 }} className="hero-art" aria-label="Decorative Islamic geometric artwork">
               <div className="art-diamond diamond-one" />
               <div className="art-diamond diamond-two" />
               <div className="art-emblem">
