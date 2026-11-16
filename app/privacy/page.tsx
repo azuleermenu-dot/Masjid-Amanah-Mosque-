@@ -25,6 +25,11 @@ const sections = [
     body: "Contact inquiries are stored in the configured mosque website database. The administration inbox is restricted to accounts specifically authorized by mosque management. Public visitors cannot browse submitted inquiries.",
   },
   {
+    icon: Database,
+    title: "Service providers and technical data",
+    body: "The website is designed to use Supabase for its database and file storage, Cloudflare Turnstile to help prevent automated abuse, and Vercel for hosting when deployed. The site also loads web fonts from Google Fonts. These services may process technical request information required to deliver, protect, or operate their features; their own privacy notices and terms also apply.",
+  },
+  {
     icon: Clock3,
     title: "Retention",
     body: "The mosque must approve and document a retention period for contact inquiries before the form is enabled for public use. Records should be kept only for the approved operational and record-keeping purpose, then handled according to that schedule.",
@@ -44,7 +49,7 @@ export default function PrivacyPage() {
       description="This notice explains how information submitted through the Masjid Amanah website is intended to be handled."
     >
       <div className="privacy-intro">
-        <span className="eyebrow">Website privacy notice</span>
+        <span className="eyebrow">Draft — management review required</span>
         <p>
           This website is designed to collect only the information needed to respond to messages sent to the mosque. The final notice, data-retention schedule, and privacy contact must be reviewed and approved by authorized Masjid Amanah management before the public contact form is enabled.
         </p>
