@@ -42,7 +42,7 @@ export default function HomePage({
 
   return (
     <>
-      <div className="topline"><div className="container topline-inner"><span>MASJID AMANAH <i>·</i> <span className="arabic" lang="ar">مسجد الأمانة</span></span><span>Official mosque website</span></div></div>
+      <div className="topline"><div className="container topline-inner"><span>MASJID AMANAH <i>·</i> <span className="arabic" lang="ar">مسجد الأمانة</span></span><span>Unofficial mosque website</span></div></div>
       <SiteHeader />
       <main>
         <section className="home-hero" id="home">
