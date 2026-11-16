@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Script from "next/script";
 import { useActionState } from "react";
 import { LoaderCircle, Send, ShieldCheck } from "lucide-react";
@@ -56,7 +57,7 @@ export function ContactForm({ siteKey }: { siteKey: string }) {
           <button className="btn-primary contact-submit" type="submit" disabled={pending}>
             {pending ? <><LoaderCircle size={16} className="spin" /> Sending…</> : <>Send message <Send size={15} /> </>}
           </button>
-          <p className="form-hint">Your message is visible only to authorized mosque administrators. Do not include passwords, payment credentials, or sensitive personal information.</p>
+          <p className="form-hint">Your message is visible only to authorized mosque administrators. Do not include passwords, payment credentials, or sensitive personal information. Read the <Link href="/privacy">privacy notice</Link>.</p>
         </form>
       )}
     </section>
