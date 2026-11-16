@@ -1,4 +1,4 @@
-import { HomePage } from "@/components/home-page";
+import HomePage from "@/components/home-page";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function Home() {
