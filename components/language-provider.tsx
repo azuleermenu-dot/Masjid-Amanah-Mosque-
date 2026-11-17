@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 export type Language = "en" | "tl" | "mr" | "ar";
 
@@ -352,22 +352,24 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
   }, [language]);
 
-  const setLanguage = (next: Language) => {
+  const setLanguage = useCallback((next: Language) => {
     setCurrentLanguage(next);
     window.localStorage.setItem(STORAGE_KEY, next);
     setWelcomeOpen(false);
-  };
+  }, []);
 
   const value = useMemo<LanguageContextValue>(() => ({
     language,
     setLanguage,
     t: (key) => messages[language][key] ?? messages.en[key] ?? key,
     translateText: (text) => {
+      const directTranslation = pageTextTranslations[language][text];
+      if (directTranslation) return directTranslation;
       const key = textAliases[text];
       return key ? (messages[language][key] ?? text) : text;
     },
     welcomeOpen: ready && welcomeOpen
-  }), [language, ready, welcomeOpen]);
+  }), [language, ready, welcomeOpen, setLanguage]);
 
   return (
     <LanguageContext.Provider value={value}>
