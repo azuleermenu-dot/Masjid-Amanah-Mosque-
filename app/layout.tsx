@@ -2,6 +2,7 @@
    Using next/font/google made CI builds depend on external font downloads. */
 /* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata, Viewport } from "next";
+import { LanguageProvider } from "@/components/language-provider";
 import "./globals.css";
 
 function getPublicSiteUrl() {
@@ -55,7 +56,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Noto+Naskh+Arabic:wght@400;500;600;700&amp;display=swap"
         />
       </head>
-      <body>{children}</body>
+      <body><LanguageProvider>{children}</LanguageProvider></body>
     </html>
   );
 }
