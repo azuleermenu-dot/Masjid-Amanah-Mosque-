@@ -6,7 +6,8 @@ export type Language = "en" | "tl" | "mr" | "ar";
 
 const STORAGE_KEY = "masjid-amanah-language";
 
-const messages: Record<Language, Record<string, string>> = {\n  // Maranao copy is an initial draft and should receive fluent community review before official adoption.
+const messages: Record<Language, Record<string, string>> = {
+  // Maranao copy is an initial draft and should receive fluent community review before official adoption.
   en: {
     language: "Language",
     chooseLanguage: "Choose your preferred language",
