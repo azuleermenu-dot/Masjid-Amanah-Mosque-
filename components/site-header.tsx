@@ -1,19 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { useLanguage, type Language } from "@/components/language-provider";
 
-const links = [
-  { key: "home", href: "/" },
-  { key: "about", href: "/about" },
-  { key: "prayerTimes", href: "/prayer-times" },
-  { key: "programs", href: "/programs" },
-  { key: "learning", href: "/learning" },
-  { key: "madrasah", href: "/education" },
-  { key: "news", href: "/news" },
-  { key: "gallery", href: "/gallery" },
+const navGroups = [
+  {
+    key: "worship",
+    links: [
+      { key: "prayerTimes", href: "/prayer-times" },
+      { key: "programs", href: "/programs" },
+    ],
+  },
+  {
+    key: "discover",
+    links: [
+      { key: "about", href: "/about" },
+      { key: "news", href: "/news" },
+      { key: "gallery", href: "/gallery" },
+    ],
+  },
+  {
+    key: "education",
+    links: [
+      { key: "learning", href: "/learning" },
+      { key: "madrasah", href: "/education" },
+    ],
+  },
 ] as const;
 
 function LanguageSelect({ mobile = false }: { mobile?: boolean }) {
@@ -36,14 +50,52 @@ function LanguageSelect({ mobile = false }: { mobile?: boolean }) {
   );
 }
 
+function NavigationGroups({ mobile = false, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
+  const { t } = useLanguage();
+
+  return (
+    <>
+      {navGroups.map((group) => (
+        <details className={mobile ? "nav-group mobile-nav-group" : "nav-group"} key={group.key}>
+          <summary>
+            <span>{t(group.key)}</span>
+            <ChevronDown size={14} aria-hidden="true" />
+          </summary>
+          <div className="nav-dropdown">
+            {group.links.map((item) => (
+              <Link key={item.href} href={item.href} onClick={onNavigate}>
+                {t(item.key)}
+                {mobile ? <ArrowUpRight size={13} aria-hidden="true" /> : null}
+              </Link>
+            ))}
+          </div>
+        </details>
+      ))}
+    </>
+  );
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const { t } = useLanguage();
 
+  useEffect(() => {
+    if (!open) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
+
+  const closeMenu = () => setOpen(false);
+
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <Link className="brand" href="/" aria-label="Masjid Amanah home" onClick={() => setOpen(false)}>
+        <Link className="brand" href="/" aria-label="Masjid Amanah home" onClick={closeMenu}>
           <span className="brand-mark" aria-hidden="true">۞</span>
           <span className="brand-copy">
             <strong>MASJID AMANAH</strong>
@@ -52,12 +104,15 @@ export function SiteHeader() {
         </Link>
 
         <nav className="desktop-nav" aria-label="Main navigation">
-          {links.map((item) => <Link key={item.href} href={item.href}>{t(item.key)}</Link>)}
+          <Link className="nav-home-link" href="/">{t("home")}</Link>
+          <NavigationGroups />
         </nav>
 
         <LanguageSelect />
+        <Link href="/contact" className="header-contact">
+          {t("contact")} <ArrowUpRight size={14} aria-hidden="true" />
+        </Link>
 
-        <Link href="/contact" className="header-contact">{t("contact")} <ArrowUpRight size={14} /></Link>
         <button
           className="menu-toggle"
           type="button"
@@ -70,16 +125,23 @@ export function SiteHeader() {
         </button>
       </div>
 
-      {open && (
-        <nav id="mobile-navigation" className="mobile-nav" aria-label="Mobile navigation">
-          {links.map((item) => (
-            <Link key={item.href} href={item.href} onClick={() => setOpen(false)}>{t(item.key)}</Link>
-          ))}
-          <Link href="/donations" onClick={() => setOpen(false)}>{t("donationInfo")}</Link>
-          <Link href="/contact" onClick={() => setOpen(false)}>{t("contactMosque")}</Link>
-          <LanguageSelect mobile />
-        </nav>
-      )}
+      {open ? (
+        <>
+          <button
+            className="mobile-nav-backdrop"
+            type="button"
+            aria-label={t("closeNavigation")}
+            onClick={closeMenu}
+          />
+          <nav id="mobile-navigation" className="mobile-nav" aria-label="Mobile navigation">
+            <Link className="mobile-home-link" href="/" onClick={closeMenu}>{t("home")}</Link>
+            <NavigationGroups mobile onNavigate={closeMenu} />
+            <Link href="/donations" onClick={closeMenu}>{t("donationInfo")}</Link>
+            <Link href="/contact" onClick={closeMenu}>{t("contactMosque")}</Link>
+            <LanguageSelect mobile />
+          </nav>
+        </>
+      ) : null}
     </header>
   );
 }
