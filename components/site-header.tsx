@@ -138,7 +138,7 @@ export function SiteHeader() {
             onClick={closeMenu}
           />
           <nav id="mobile-navigation" className="mobile-nav" aria-label="Mobile navigation">
-            <Link className="mobile-home-link" href="/" onClick={closeMenu}>{t("home")}</Link>
+            <Link className="mobile-home-link" href="/" onClick={closeMenu} aria-current={pathname === "/" ? "page" : undefined}>{t("home")}</Link>
             <NavigationGroups mobile onNavigate={closeMenu} />
             <Link href="/donations" onClick={closeMenu}>{t("donationInfo")}</Link>
             <Link href="/contact" onClick={closeMenu}>{t("contactMosque")}</Link>
