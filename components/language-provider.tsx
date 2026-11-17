@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useSyncExternalStore, type ReactNode } from "react";
 
 export type Language = "en" | "tl" | "mr" | "ar";
 
@@ -332,21 +332,30 @@ type LanguageContextValue = {
 };
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
+const LANGUAGE_CHANGE_EVENT = "masjid-amanah-language-change";
+
+function subscribeToLanguage(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(LANGUAGE_CHANGE_EVENT, onStoreChange);
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(LANGUAGE_CHANGE_EVENT, onStoreChange);
+  };
+}
+
+function getStoredLanguage(): Language | null {
+  const saved = window.localStorage.getItem(STORAGE_KEY);
+  return saved && ["en", "tl", "mr", "ar"].includes(saved) ? (saved as Language) : null;
+}
+
+function getServerLanguage(): Language | null {
+  return null;
+}
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setCurrentLanguage] = useState<Language>("en");
-  const [welcomeOpen, setWelcomeOpen] = useState(false);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY) as Language | null;
-    if (saved && ["en", "tl", "mr", "ar"].includes(saved)) {
-      setCurrentLanguage(saved);
-    } else {
-      setWelcomeOpen(true);
-    }
-    setReady(true);
-  }, []);
+  const storedLanguage = useSyncExternalStore(subscribeToLanguage, getStoredLanguage, getServerLanguage);
+  const language = storedLanguage ?? "en";
+  const welcomeOpen = storedLanguage === null;
 
   useEffect(() => {
     document.documentElement.lang = language === "tl" ? "fil" : language === "mr" ? "mrw" : language;
@@ -354,9 +363,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [language]);
 
   const setLanguage = useCallback((next: Language) => {
-    setCurrentLanguage(next);
     window.localStorage.setItem(STORAGE_KEY, next);
-    setWelcomeOpen(false);
+    window.dispatchEvent(new Event(LANGUAGE_CHANGE_EVENT));
   }, []);
 
   const value = useMemo<LanguageContextValue>(() => ({
@@ -369,13 +377,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const key = textAliases[text];
       return key ? (messages[language][key] ?? text) : text;
     },
-    welcomeOpen: ready && welcomeOpen
-  }), [language, ready, welcomeOpen, setLanguage]);
+    welcomeOpen
+  }), [language, storedLanguage, welcomeOpen, setLanguage]);
 
   return (
     <LanguageContext.Provider value={value}>
       {children}
-      {ready && welcomeOpen ? (
+      {welcomeOpen ? (
         <div className="language-welcome-backdrop" role="dialog" aria-modal="true" aria-labelledby="language-welcome-title">
           <section className="language-welcome-panel">
             <span className="language-welcome-mark" aria-hidden="true">۞</span>
