@@ -715,3 +715,17 @@ button { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .language-choice-grid button { transition: none; }
 }
+
+.mobile-language-picker { display: none; }
+@media (max-width: 760px) {
+  .header-inner > .language-picker { display: none; }
+  .mobile-nav .mobile-language-picker {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 12px 0 4px;
+    border-top: 1px solid var(--line);
+  }
+  .mobile-nav .mobile-language-picker > span { display: inline-block; }
+  .mobile-nav .mobile-language-picker select { max-width: none; }
+}
