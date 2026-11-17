@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { useLanguage } from "@/components/language-provider";
 
 export function SiteFooter() {
+  const { t } = useLanguage();
+
   return (
     <footer className="site-footer" id="contact">
       <div className="container footer-main">
@@ -12,35 +15,35 @@ export function SiteFooter() {
               <span className="arabic" lang="ar">مسجد الأمانة</span>
             </span>
           </Link>
-          <p>A place of worship, knowledge, unity, and community.</p>
+          <p>{t("footerTagline")}</p>
         </div>
         <div>
-          <span className="footer-label">Explore</span>
+          <span className="footer-label">{t("footerExplore")}</span>
           <div className="footer-links">
-            <Link href="/about">About the mosque</Link>
-            <Link href="/prayer-times">Prayer times</Link>
-            <Link href="/programs">Programs & activities</Link>
-            <Link href="/learning">Islamic learning</Link>
+            <Link href="/about">{t("aboutMasjid")}</Link>
+            <Link href="/prayer-times">{t("prayerTimes")}</Link>
+            <Link href="/programs">{t("programs")}</Link>
+            <Link href="/learning">{t("learning")}</Link>
           </div>
         </div>
         <div>
-          <span className="footer-label">Information</span>
+          <span className="footer-label">{t("footerInformation")}</span>
           <div className="footer-links">
-            <Link href="/news">News & announcements</Link>
-            <Link href="/gallery">Gallery</Link>
-            <Link href="/donations">Donation information</Link>
-            <Link href="/contact">Contact & location</Link>
+            <Link href="/news">{t("news")}</Link>
+            <Link href="/gallery">{t("gallery")}</Link>
+            <Link href="/donations">{t("donationInfo")}</Link>
+            <Link href="/contact">{t("contactInformation")}</Link>
             <Link href="/privacy">Privacy notice</Link>
           </div>
         </div>
         <div className="footer-contact">
-          <span className="footer-label">Official details</span>
-          <p>Address, contact channels, and official social links will be published after confirmation by mosque management.</p>
-          <span className="pending-label">Details pending verification</span>
+          <span className="footer-label">{t("footerOfficialDetails")}</span>
+          <p>{t("footerPending")}</p>
+          <span className="pending-label">{t("pendingVerification")}</span>
         </div>
       </div>
       <div className="container footer-bottom">
-        <span>© {new Date().getFullYear()} Masjid Amanah. All rights reserved.</span>
+        <span>© {new Date().getFullYear()} Masjid Amanah. {t("allRightsReserved")}</span>
         <span className="arabic" lang="ar">مسجد الأمانة</span>
       </div>
     </footer>
