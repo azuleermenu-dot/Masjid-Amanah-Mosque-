@@ -1326,3 +1326,12 @@ button { font: inherit; }
     font-weight: 700;
   }
 }
+
+
+/* Keep the header controls above the mobile dismiss backdrop. */
+@media (max-width: 960px) {
+  .site-header > .header-inner {
+    position: relative;
+    z-index: 82;
+  }
+}
