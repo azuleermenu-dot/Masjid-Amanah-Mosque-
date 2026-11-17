@@ -18,7 +18,7 @@ export function PageShell({ eyebrow, title, description, children }: Props) {
   return (
     <>
       <SiteHeader />
-      <main lang={language === "tl" ? "fil" : language} dir={language === "ar" ? "rtl" : "ltr"}>
+      <main lang={language === "tl" ? "fil" : language === "mr" ? "mrw" : language} dir={language === "ar" ? "rtl" : "ltr"}>
         <section className="page-hero">
           <div className="page-hero-pattern" aria-hidden="true" />
           <div className="container page-hero-content">
