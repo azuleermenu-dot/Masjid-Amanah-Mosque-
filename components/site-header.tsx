@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { useLanguage, type Language } from "@/components/language-provider";
@@ -52,18 +53,20 @@ function LanguageSelect({ mobile = false }: { mobile?: boolean }) {
 
 function NavigationGroups({ mobile = false, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
   const { t } = useLanguage();
+  const pathname = usePathname();
+  const isCurrentPath = (href: string) => pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
   return (
     <>
       {navGroups.map((group) => (
-        <details className={mobile ? "nav-group mobile-nav-group" : "nav-group"} key={group.key}>
+        <details className={`${mobile ? "nav-group mobile-nav-group" : "nav-group"}${group.links.some((item) => isCurrentPath(item.href)) ? " is-active" : ""}`} key={group.key}>
           <summary>
             <span>{t(group.key)}</span>
             <ChevronDown size={14} aria-hidden="true" />
           </summary>
           <div className="nav-dropdown">
             {group.links.map((item) => (
-              <Link key={item.href} href={item.href} onClick={onNavigate}>
+              <Link key={item.href} href={item.href} onClick={onNavigate} aria-current={isCurrentPath(item.href) ? "page" : undefined}>
                 {t(item.key)}
                 {mobile ? <ArrowUpRight size={13} aria-hidden="true" /> : null}
               </Link>
@@ -78,6 +81,7 @@ function NavigationGroups({ mobile = false, onNavigate }: { mobile?: boolean; on
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const { t } = useLanguage();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!open) return;
@@ -104,7 +108,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="desktop-nav" aria-label="Main navigation">
-          <Link className="nav-home-link" href="/">{t("home")}</Link>
+          <Link className="nav-home-link" href="/" aria-current={pathname === "/" ? "page" : undefined}>{t("home")}</Link>
           <NavigationGroups />
         </nav>
 
