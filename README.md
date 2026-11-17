@@ -2,6 +2,16 @@
 
 A responsive, independently developed unofficial website for sharing information about Masjid Amanah (مسجد الأمانة).
 
+> **Unofficial community project:** This repository is not an official publication of Masjid Amanah and does not imply mosque management endorsement. The project must remain clearly identified as unofficial until authorized representatives formally approve and claim it.
+
+## Open-source license
+
+The original source code in this repository is released under the **MIT License**. Everyone may use, study, copy, modify, merge, publish, distribute, sublicense, and deploy their own version, including for commercial purposes, provided the license and copyright notice are retained.
+
+The MIT License applies only to original code and materials that the project author has the right to license. It does **not** grant permission to use Masjid Amanah's name, logo, mosque photographs, personal information, third-party assets, or other materials owned by someone else. See [COPYRIGHT.md](./COPYRIGHT.md).
+
+You may modify and deploy your own fork. You cannot directly change the original repository or the official production deployment unless the repository owner separately grants you access. Changes proposed to this repository must go through a pull request and require maintainer approval. A public repository is not the same as public write access.
+
 ## Technology
 - Next.js 16.4.6 / React 19.3.1 / TypeScript
 - Tailwind CSS v4
@@ -63,7 +73,8 @@ This project deliberately does not invent the mosque's history, leaders, address
 - Full announcement create, edit, publish/unpublish, and delete workflow.
 - Event create, edit, publish/unpublish, and delete workflow, with an iCalendar download for upcoming public events.
 - Prayer schedule single-entry and full-day bulk editors, publication controls, and deletion.
-- Learning resource create, edit, review, publish/unpublish, delete, and public detail pages.\n- Madrasah program and graduate-directory administration, with publication gated by recorded student/guardian consent and administrator approval. Private student, guardian, class, academic-year, and enrollment tables are protected by RLS.
+- Learning resource create, edit, review, publish/unpublish, delete, and public detail pages.
+- Madrasah program and graduate-directory administration, with publication gated by recorded student/guardian consent and administrator approval. Private student, guardian, class, academic-year, and enrollment tables are protected by RLS.
 - Donation method create, edit, verify, publish/unpublish, and delete workflow; edited payment details require fresh confirmation.
 - Mosque gallery uploads and deletion with private storage and short-lived signed public image URLs.
 - Private contact inquiry inbox with status management and a Turnstile-protected submission form.
@@ -74,3 +85,6 @@ This project deliberately does not invent the mosque's history, leaders, address
 - GitHub Actions checks TypeScript, the production build, and dependency audit reporting on repository changes.
 - Approval-gated sitemap includes published announcement and learning-resource detail pages when the production HTTPS domain and content approval switch are configured.
 - Global response headers disable MIME sniffing, block framing, limit referrer leakage, and disable unused device permissions.
+
+## Contributing
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull request. Never include real personal data, private student records, credentials, API keys, or unapproved mosque content in a contribution.
