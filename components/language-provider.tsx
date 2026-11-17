@@ -55,7 +55,7 @@ const messages: Record<Language, Record<string, string>> = {
     footerExplore: "Explore", footerInformation: "Information", footerOfficialDetails: "Official details",
     footerPending: "Address, contact channels, and official social links will be published after confirmation by mosque management.",
     pendingVerification: "Details pending verification",
-    allRightsReserved: "All rights reserved.",
+    allRightsReserved: "All rights reserved.", privacyNotice: "Privacy notice",
     arabicWelcome: "Welcome to Masjid Amanah"
   },
   tl: {
@@ -106,7 +106,7 @@ const messages: Record<Language, Record<string, string>> = {
     footerExplore: "Tuklasin", footerInformation: "Impormasyon", footerOfficialDetails: "Mga opisyal na detalye",
     footerPending: "Ilalathala ang address, mga contact channel, at opisyal na social link kapag kinumpirma na ng pamunuan ng moske.",
     pendingVerification: "Naghihintay ng beripikasyon",
-    allRightsReserved: "Lahat ng karapatan ay nakalaan.",
+    allRightsReserved: "Lahat ng karapatan ay nakalaan.", privacyNotice: "Paunawa sa pribasiya",
     arabicWelcome: "Maligayang pagdating sa Masjid Amanah"
   },
   mr: {
@@ -157,7 +157,7 @@ const messages: Record<Language, Record<string, string>> = {
     footerExplore: "Kilalayi", footerInformation: "Klaro", footerOfficialDetails: "Mga opisyal a detalye",
     footerPending: "So address, mga contact channel, ago opisyal a social link na ipublicar matapos kumpirmahan o pamunuan o masjid.",
     pendingVerification: "Pipitaron pa so beripikasyon",
-    allRightsReserved: "Aton so karapatan.",
+    allRightsReserved: "Aton so karapatan.", privacyNotice: "Klaro sa pribasiya",
     arabicWelcome: "Mapiya a kapipita ko sa Masjid Amanah"
   },
   ar: {
@@ -208,7 +208,7 @@ const messages: Record<Language, Record<string, string>> = {
     footerExplore: "استكشف", footerInformation: "معلومات", footerOfficialDetails: "التفاصيل الرسمية",
     footerPending: "ستنشر إدارة المسجد العنوان وقنوات التواصل والروابط الاجتماعية الرسمية بعد تأكيدها.",
     pendingVerification: "التفاصيل بانتظار التحقق",
-    allRightsReserved: "جميع الحقوق محفوظة.",
+    allRightsReserved: "جميع الحقوق محفوظة.", privacyNotice: "إشعار الخصوصية",
     arabicWelcome: "مرحباً بكم في مسجد الأمانة"
   }
 };
