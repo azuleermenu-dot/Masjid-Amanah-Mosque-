@@ -35,7 +35,7 @@ export function SiteFooter() {
             <Link href="/gallery">{t("gallery")}</Link>
             <Link href="/donations">{t("donationInfo")}</Link>
             <Link href="/contact">{t("contactInformation")}</Link>
-            <Link href="/privacy">Privacy notice</Link>
+            <Link href="/privacy">{t("privacyNotice")}</Link>
           </div>
         </div>
         <div className="footer-contact">
