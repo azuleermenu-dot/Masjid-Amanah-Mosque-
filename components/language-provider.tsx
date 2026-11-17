@@ -6,7 +6,7 @@ export type Language = "en" | "tl" | "mr" | "ar";
 
 const STORAGE_KEY = "masjid-amanah-language";
 
-const messages: Record<Language, Record<string, string>> = {
+const messages: Record<Language, Record<string, string>> = {\n  // Maranao copy is an initial draft and should receive fluent community review before official adoption.
   en: {
     language: "Language",
     chooseLanguage: "Choose your preferred language",
@@ -348,7 +348,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    document.documentElement.lang = language === "tl" ? "fil" : language === "mr" ? "mr" : language;
+    document.documentElement.lang = language === "tl" ? "fil" : language === "mr" ? "mrw" : language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
   }, [language]);
 
