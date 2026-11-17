@@ -16,9 +16,29 @@ const links = [
   { key: "gallery", href: "/gallery" },
 ] as const;
 
+function LanguageSelect({ mobile = false }: { mobile?: boolean }) {
+  const { language, setLanguage, t } = useLanguage();
+
+  return (
+    <label className={mobile ? "language-picker mobile-language-picker" : "language-picker"}>
+      <span>{t("language")}</span>
+      <select
+        value={language}
+        aria-label={t("language")}
+        onChange={(event) => setLanguage(event.target.value as Language)}
+      >
+        <option value="en">English</option>
+        <option value="tl">Filipino / Tagalog</option>
+        <option value="mr">Maranao</option>
+        <option value="ar">العربية</option>
+      </select>
+    </label>
+  );
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <header className="site-header">
@@ -35,19 +55,7 @@ export function SiteHeader() {
           {links.map((item) => <Link key={item.href} href={item.href}>{t(item.key)}</Link>)}
         </nav>
 
-        <label className="language-picker">
-          <span>{t("language")}</span>
-          <select
-            value={language}
-            aria-label={t("language")}
-            onChange={(event) => setLanguage(event.target.value as Language)}
-          >
-            <option value="en">English</option>
-            <option value="tl">Filipino / Tagalog</option>
-            <option value="mr">Maranao</option>
-            <option value="ar">العربية</option>
-          </select>
-        </label>
+        <LanguageSelect />
 
         <Link href="/contact" className="header-contact">{t("contact")} <ArrowUpRight size={14} /></Link>
         <button
@@ -69,6 +77,7 @@ export function SiteHeader() {
           ))}
           <Link href="/donations" onClick={() => setOpen(false)}>{t("donationInfo")}</Link>
           <Link href="/contact" onClick={() => setOpen(false)}>{t("contactMosque")}</Link>
+          <LanguageSelect mobile />
         </nav>
       )}
     </header>
